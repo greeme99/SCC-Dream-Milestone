@@ -22,6 +22,8 @@ const DEFAULT_FULL_GUIDE_URL =
   'https://drive.google.com/file/d/1oxW52eu4mn5B5KvOBi5dECHMRo5Wu8Bn/view?usp=sharing';
 const DEFAULT_PRE_SHEET_URL =
   'https://drive.google.com/file/d/1KCbALO9SMYKk-eTLhPX1grv2qe8hcfhP/view?usp=sharing';
+const DEFAULT_WORKBOOK_URL =
+  'https://drive.google.com/file/d/1hhYsXm_-CUiD_lZHcNoqcr3vcRv9OO7B/view?usp=sharing';
 const DEFAULT_QUESTION_CARDS_URL =
   'https://drive.google.com/file/d/1RBe4MmX3Ze-tG7H2dQADI97GLNi95jH5/view?usp=sharing';
 
@@ -31,6 +33,7 @@ const rawCoachEvalUrl = process.env.NEXT_PUBLIC_FORM_COACH_EVAL_URL?.trim() || D
 const rawStudentEvalUrl = process.env.NEXT_PUBLIC_FORM_STUDENT_EVAL_URL?.trim() || DEFAULT_STUDENT_EVAL_URL;
 const rawFullGuideUrl = process.env.NEXT_PUBLIC_DRIVE_FULL_GUIDE_URL?.trim() || DEFAULT_FULL_GUIDE_URL;
 const rawPreSheetUrl = process.env.NEXT_PUBLIC_DRIVE_PRE_SHEET_URL?.trim() || DEFAULT_PRE_SHEET_URL;
+const rawWorkbookUrl = process.env.NEXT_PUBLIC_DRIVE_WORKBOOK_URL?.trim() || DEFAULT_WORKBOOK_URL;
 const rawQuestionCardsUrl =
   process.env.NEXT_PUBLIC_DRIVE_QUESTION_CARDS_URL?.trim() || DEFAULT_QUESTION_CARDS_URL;
 
@@ -103,8 +106,8 @@ export const DRIVE_RESOURCES: DriveResourceItem[] = [
     description: '1~5회기 산출물 템플릿 5종 + Between Session Action Experiment 기록지 통합본',
     format: 'PDF',
     category: '학생 워크북',
-    url: process.env.NEXT_PUBLIC_DRIVE_WORKBOOK_URL?.trim() || '',
-    isConfigured: Boolean(process.env.NEXT_PUBLIC_DRIVE_WORKBOOK_URL?.trim())
+    url: rawWorkbookUrl,
+    isConfigured: Boolean(rawWorkbookUrl)
   },
   {
     id: 'RES-04',
