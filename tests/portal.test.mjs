@@ -63,6 +63,8 @@ test('TC-008 ~ TC-013: Tab 2 Pre-session, Sessions 1~5 5-stage tabs, checklists,
   assert.ok(detailView.includes('navigator.clipboard.writeText'), 'Student eval clipboard copy implemented');
   assert.ok(detailView.includes('회기 작성하기'), 'Sessions 1~4 Google Form CTA');
   assert.ok(detailView.includes('코치 성과평가 작성하기'), 'Session 5 Coach Eval CTA');
+  assert.ok(detailView.includes('다음 단계:'), 'Stage-to-stage next button implemented');
+  assert.ok(detailView.includes("activeStage === 'close'"), 'Between Session and Log restricted to Stage 5');
 });
 
 test('TC-014 ~ TC-016: Tab 3 References 5 resources, optional coaching tools (GROW, STAR, BRAVE), and quality checklist', () => {

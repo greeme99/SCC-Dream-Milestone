@@ -29,23 +29,28 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
   };
 
   const rawStage = searchParams.get('stage') as StageKey | null;
-  const hasBetween = Boolean(session.betweenSession);
+  // If ?stage=between, map to Stage 5 ('close') where Between Session is displayed
   const activeStage: StageKey =
-    rawStage &&
-    VALID_STAGES.includes(rawStage) &&
-    (rawStage !== 'between' || hasBetween)
-      ? rawStage
-      : 'intro';
+    rawStage === 'between'
+      ? 'close'
+      : rawStage && VALID_STAGES.includes(rawStage)
+        ? rawStage
+        : 'intro';
 
   const setStage = (nextStage: StageKey) => {
+    const targetStage = nextStage === 'between' ? 'close' : nextStage;
     const params = new URLSearchParams(searchParams.toString());
-    params.set('stage', nextStage);
+    params.set('stage', targetStage);
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    if (typeof window !== 'undefined') {
+      const el = document.getElementById('stage-guide-panel');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
   };
 
-  const tabOrder: StageKey[] = hasBetween
-    ? ['intro', 'explore', 'deepen', 'action', 'close', 'between']
-    : ['intro', 'explore', 'deepen', 'action', 'close'];
+  const tabOrder: StageKey[] = ['intro', 'explore', 'deepen', 'action', 'close'];
 
   const handleTabKeyDown = (e: React.KeyboardEvent, idx: number) => {
     if (e.key === 'ArrowRight') {
@@ -69,9 +74,12 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
     st.checkpoints.map((c) => c.id)
   );
 
-  const currentStageGuide =
-    activeStage !== 'between'
-      ? session.stages.find((st) => st.key === activeStage) || session.stages[0]
+  const stageIndex = session.stages.findIndex((st) => st.key === activeStage);
+  const currentStageGuide = session.stages[stageIndex >= 0 ? stageIndex : 0];
+  const prevStage = stageIndex > 0 ? session.stages[stageIndex - 1] : null;
+  const nextStage =
+    stageIndex >= 0 && stageIndex < session.stages.length - 1
+      ? session.stages[stageIndex + 1]
       : null;
 
   const handleOpenCoachingLog = () => {
@@ -131,11 +139,11 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
         </p>
       </section>
 
-      {/* Interactive 5-Stage + Between Session Tab Bar */}
+      {/* Interactive 5-Stage Tab Bar */}
       <div
         role="tablist"
         aria-label={`${session.sessionNumber}회기 진행 단계 탭`}
-        className="mb-6 flex flex-wrap gap-2 rounded-lg bg-subtle p-2"
+        className="mb-4 flex flex-wrap gap-2 rounded-lg bg-subtle p-2"
       >
         {session.stages.map((st, idx) => {
           const isSelected = activeStage === st.key;
@@ -157,36 +165,158 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
             </button>
           );
         })}
-
-        {session.betweenSession && (
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeStage === 'between'}
-            onClick={() => setStage('between')}
-            onKeyDown={(e) => handleTabKeyDown(e, session.stages.length)}
-            className={`btn-press rounded-pill px-4 py-2.5 text-caption font-semibold transition ${
-              activeStage === 'between'
-                ? 'bg-primary text-on-primary shadow-card'
-                : 'text-body hover:bg-hover'
-            }`}
-          >
-            ⚡ Between Session {session.sessionNumber}
-          </button>
-        )}
       </div>
 
-      {/* Active Stage or Between Session Panel */}
-      {activeStage === 'between' && session.betweenSession ? (
+      {/* Stage 5 (마무리) Active Quick Anchor Bar */}
+      {activeStage === 'close' && (
+        <div className="mb-6 flex flex-wrap items-center gap-2 rounded-md border border-line bg-surface p-3 text-caption font-semibold">
+          <span className="text-muted">마무리 단계 항목:</span>
+          <a
+            href="#stage-guide-panel"
+            className="rounded-pill bg-subtle px-3 py-1 text-main transition hover:bg-hover"
+          >
+            5단계 가이드
+          </a>
+          {session.betweenSession && (
+            <a
+              href="#between-session-section"
+              className="rounded-pill bg-primary-light px-3 py-1 text-primary-hover transition hover:opacity-80"
+            >
+              ⚡ Between Session 과제 ↓
+            </a>
+          )}
+          {session.sessionNumber <= 4 ? (
+            <a
+              href="#coaching-log-section"
+              className="rounded-pill bg-primary-light px-3 py-1 text-primary-hover transition hover:opacity-80"
+            >
+              📝 코칭일지 작성 ↓
+            </a>
+          ) : (
+            <a
+              href="#performance-eval-section"
+              className="rounded-pill bg-primary-light px-3 py-1 text-primary-hover transition hover:opacity-80"
+            >
+              🏁 최종 성과평가 ↓
+            </a>
+          )}
+        </div>
+      )}
+
+      {/* Active Stage Panel */}
+      {currentStageGuide && (
         <section
+          id="stage-guide-panel"
           role="tabpanel"
           className="mb-6 rounded-lg border border-line bg-surface p-6 shadow-card"
         >
-          <span className="inline-block rounded-pill bg-[var(--color-warning-bg)] px-3.5 py-1 text-caption font-bold text-warning">
-            {session.betweenSession.badge}
-          </span>
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-4">
+            <div>
+              <span className="text-caption font-bold text-primary-hover">
+                STAGE {currentStageGuide.stepNumber} OF 5
+              </span>
+              <h2 className="text-h2 font-semibold text-main">
+                {currentStageGuide.label} (권장 소요 시간: {currentStageGuide.duration})
+              </h2>
+            </div>
+            <span className="rounded-pill bg-primary-light px-3.5 py-1 text-caption font-bold text-primary-hover">
+              ⏱ {currentStageGuide.duration}
+            </span>
+          </div>
+
+          <p className="mt-4 text-body text-body">
+            <strong className="text-main">단계 핵심 목적:</strong> {currentStageGuide.purpose}
+          </p>
+
+          {/* Core Coaching Questions */}
+          <h3 className="mt-6 text-h3 font-semibold text-main">핵심 코칭 질문 (Core Questions)</h3>
+          <ul className="mt-3 space-y-2.5">
+            {currentStageGuide.questions.map((q) => (
+              <li
+                key={q}
+                className="rounded-r-sm border-l-4 border-primary bg-subtle px-4 py-3 font-medium text-main"
+              >
+                “{q}”
+              </li>
+            ))}
+          </ul>
+
+          {/* Empathy Guide */}
+          <div className="mt-5 rounded-md bg-primary-light p-4 text-body text-main">
+            <strong className="block font-semibold text-primary-hover">
+              💬 공감 표현 가이드 (Empathy Prompts)
+            </strong>
+            <ul className="mt-1.5 list-disc space-y-1 pl-5">
+              {currentStageGuide.empathyGuide.map((emp) => (
+                <li key={emp}>“{emp}”</li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Coach Checkpoints */}
+          <div className="mt-6">
+            <ChecklistGroup
+              title="체크포인트"
+              items={currentStageGuide.checkpoints}
+              resetScopeIds={allSessionCheckpointIds}
+              onResetToast={showToast}
+            />
+          </div>
+
+          {/* Stage-to-Stage Connection Buttons */}
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5">
+            {prevStage ? (
+              <button
+                type="button"
+                onClick={() => setStage(prevStage.key)}
+                className="btn-press inline-flex min-h-11 items-center gap-2 rounded-pill border border-line-strong bg-surface px-5 py-2.5 text-caption font-semibold text-main transition hover:bg-subtle"
+              >
+                <span aria-hidden="true">←</span>
+                <span>이전 단계: {prevStage.label} ({prevStage.duration})</span>
+              </button>
+            ) : (
+              <div />
+            )}
+
+            {nextStage ? (
+              <button
+                type="button"
+                onClick={() => setStage(nextStage.key)}
+                className="bg-gradient-primary card-elevate btn-press inline-flex min-h-11 items-center gap-2 rounded-pill px-6 py-2.5 text-caption font-semibold text-on-primary shadow-card"
+              >
+                <span>다음 단계: {nextStage.label} ({nextStage.duration})</span>
+                <span aria-hidden="true">→</span>
+              </button>
+            ) : (
+              <div className="flex items-center gap-2 text-caption font-bold text-primary-hover">
+                <span>🏁 5단계 마무리 단계</span>
+                <span className="max-sm:hidden">
+                  ({session.sessionNumber <= 4 ? '아래 Between Session 및 일지 작성으로 이어집니다' : '아래 최종 성과평가로 이어집니다'} ↓)
+                </span>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* =================================================================== */}
+      {/* STAGE 5 ONLY: BETWEEN SESSION ACTION EXPERIMENT GUIDE               */}
+      {/* =================================================================== */}
+      {activeStage === 'close' && session.betweenSession && (
+        <section
+          id="between-session-section"
+          className="mb-6 rounded-lg border border-line bg-surface p-6 shadow-card"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="inline-block rounded-pill bg-[var(--color-warning-bg)] px-3.5 py-1 text-caption font-bold text-warning">
+              {session.betweenSession.badge}
+            </span>
+            <span className="text-caption font-semibold text-muted">
+              회기와 회기 사이 실행 과제
+            </span>
+          </div>
           <h2 className="mt-3 text-h2 font-semibold text-main">
-            {session.betweenSession.title}
+            ⚡ {session.betweenSession.title}
           </h2>
           <p className="mt-2 text-body text-body">{session.betweenSession.summary}</p>
 
@@ -207,97 +337,16 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
             {session.betweenSession.coachNote}
           </div>
         </section>
-      ) : (
-        currentStageGuide && (
-          <section
-            role="tabpanel"
-            className="mb-6 rounded-lg border border-line bg-surface p-6 shadow-card"
-          >
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-4">
-              <div>
-                <span className="text-caption font-bold text-primary-hover">
-                  STAGE {currentStageGuide.stepNumber} OF 5
-                </span>
-                <h2 className="text-h2 font-semibold text-main">
-                  {currentStageGuide.label} (권장 소요 시간: {currentStageGuide.duration})
-                </h2>
-              </div>
-              <span className="rounded-pill bg-primary-light px-3.5 py-1 text-caption font-bold text-primary-hover">
-                ⏱ {currentStageGuide.duration}
-              </span>
-            </div>
-
-            <p className="mt-4 text-body text-body">
-              <strong className="text-main">단계 핵심 목적:</strong> {currentStageGuide.purpose}
-            </p>
-
-            {/* Core Coaching Questions */}
-            <h3 className="mt-6 text-h3 font-semibold text-main">핵심 코칭 질문 (Core Questions)</h3>
-            <ul className="mt-3 space-y-2.5">
-              {currentStageGuide.questions.map((q) => (
-                <li
-                  key={q}
-                  className="rounded-r-sm border-l-4 border-primary bg-subtle px-4 py-3 font-medium text-main"
-                >
-                  “{q}”
-                </li>
-              ))}
-            </ul>
-
-            {/* Empathy Guide */}
-            <div className="mt-5 rounded-md bg-primary-light p-4 text-body text-main">
-              <strong className="block font-semibold text-primary-hover">
-                💬 공감 표현 가이드 (Empathy Prompts)
-              </strong>
-              <ul className="mt-1.5 list-disc space-y-1 pl-5">
-                {currentStageGuide.empathyGuide.map((emp) => (
-                  <li key={emp}>“{emp}”</li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Coach Checkpoints */}
-            <div className="mt-6">
-              <ChecklistGroup
-                title="체크포인트"
-                items={currentStageGuide.checkpoints}
-                resetScopeIds={allSessionCheckpointIds}
-                onResetToast={showToast}
-              />
-            </div>
-          </section>
-        )
-      )}
-
-      {/* Between Session Summary Callout (for Sessions 1~4 when viewing stages 1~5) */}
-      {session.betweenSession && activeStage !== 'between' && (
-        <section className="mb-6 rounded-lg border border-line-strong bg-subtle p-5">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <span className="text-caption font-bold text-primary-hover">
-                {session.betweenSession.badge}
-              </span>
-              <h3 className="text-h3 font-semibold text-main">
-                {session.betweenSession.title}
-              </h3>
-              <p className="mt-1 text-caption text-body">{session.betweenSession.summary}</p>
-            </div>
-            <button
-              type="button"
-              onClick={() => setStage('between')}
-              className="btn-press rounded-pill border border-primary bg-surface px-4 py-2 text-caption font-semibold text-primary transition hover:bg-primary-light"
-            >
-              Between Session {session.sessionNumber} 상세 보기 →
-            </button>
-          </div>
-        </section>
       )}
 
       {/* =================================================================== */}
-      {/* EXTERNAL GOOGLE FORM INTEGRATION: SESSIONS 1~4 COACHING LOG         */}
+      {/* STAGE 5 ONLY: SESSIONS 1~4 COACHING LOG GOOGLE FORM                */}
       {/* =================================================================== */}
-      {session.sessionNumber <= 4 && (
-        <section className="mb-6 rounded-lg border-2 border-primary bg-surface p-6 shadow-card">
+      {activeStage === 'close' && session.sessionNumber <= 4 && (
+        <section
+          id="coaching-log-section"
+          className="mb-6 rounded-lg border-2 border-primary bg-surface p-6 shadow-card"
+        >
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <h2 className="text-h2 font-semibold text-main">
@@ -340,10 +389,13 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
       )}
 
       {/* =================================================================== */}
-      {/* EXTERNAL GOOGLE FORM INTEGRATION: SESSION 5 PERFORMANCE EVALUATION  */}
+      {/* STAGE 5 ONLY: SESSION 5 PERFORMANCE EVALUATION                      */}
       {/* =================================================================== */}
-      {session.sessionNumber === 5 && (
-        <section className="mb-6 rounded-lg border-2 border-primary bg-surface p-6 shadow-card">
+      {activeStage === 'close' && session.sessionNumber === 5 && (
+        <section
+          id="performance-eval-section"
+          className="mb-6 rounded-lg border-2 border-primary bg-surface p-6 shadow-card"
+        >
           <h2 className="text-h2 font-semibold text-main">
             🏁 5회기 코치(멘토) 및 학생(멘티) 성과평가
           </h2>
