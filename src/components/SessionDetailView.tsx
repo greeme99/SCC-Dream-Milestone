@@ -282,7 +282,7 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
                   className="btn-stage-prev btn-press inline-flex min-h-11 items-center gap-2 px-4 py-2 text-caption font-semibold"
                 >
                   <span aria-hidden="true">←</span>
-                  <span>이전 단계: {prevStage.label} ({prevStage.duration})</span>
+                  <span>{prevStage.label} ({prevStage.duration})</span>
                 </button>
               ) : (
                 <div />
@@ -294,7 +294,7 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
                   onClick={() => setStage(nextStage.key)}
                   className="btn-stage-next btn-press inline-flex min-h-11 items-center gap-2 px-5 py-2 text-caption font-semibold"
                 >
-                  <span>다음 단계: {nextStage.label} ({nextStage.duration})</span>
+                  <span>{nextStage.label} ({nextStage.duration})</span>
                   <span aria-hidden="true">→</span>
                 </button>
               ) : (
