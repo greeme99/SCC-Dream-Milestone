@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { AppShell } from '@/components/AppShell';
 import { PROGRAM_OVERVIEW } from '@/data/program-overview';
@@ -43,19 +42,11 @@ export default function OverviewPage() {
 
       {/* 2. 5-Session Operating Model Process Flow */}
       <section className="rounded-lg border border-line bg-surface p-6 shadow-card">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-4">
-          <div>
-            <h2 className="text-h2 font-semibold text-main">5회기 표준 운영 모델 프로세스</h2>
-            <p className="mt-1 text-caption text-muted">
-              각 회기 카드를 클릭하면 해당 코칭모델 상세 가이드 화면으로 즉시 이동합니다.
-            </p>
-          </div>
-          <Link
-            href="/model/pre"
-            className="bg-gradient-primary btn-press rounded-pill px-4 py-2 text-caption font-semibold text-on-primary shadow-card"
-          >
-            프리세션부터 시작하기 →
-          </Link>
+        <div className="border-b border-line pb-4">
+          <h2 className="text-h2 font-semibold text-main">5회기 표준 운영 모델 프로세스</h2>
+          <p className="mt-1 text-caption text-muted">
+            각 회기 카드를 클릭하면 해당 코칭모델 상세 가이드 화면으로 즉시 이동합니다.
+          </p>
         </div>
 
         {/* Vertical Stepper Flow with 3D Debossed/Elevated Cards */}
