@@ -511,14 +511,14 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
           href={session.prevLink.href}
           className="btn-press rounded-pill border border-line-strong bg-surface px-5 py-2.5 text-caption font-semibold text-body transition hover:bg-hover"
         >
-          ← 이전: {session.prevLink.label}
+          ← {session.prevLink.label}
         </Link>
         {session.nextLink ? (
           <Link
             href={session.nextLink.href}
             className="bg-gradient-primary card-elevate btn-press rounded-pill px-6 py-2.5 text-body font-semibold text-on-primary shadow-card"
           >
-            다음: {session.nextLink.label} →
+            {session.nextLink.label} →
           </Link>
         ) : (
           <Link
