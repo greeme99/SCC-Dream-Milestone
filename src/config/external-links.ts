@@ -17,11 +17,12 @@ export interface DriveResourceItem {
 
 const DEFAULT_LOG_FORM_URL = 'https://forms.gle/wP7FB523KMFWAAKo9';
 const DEFAULT_COACH_EVAL_URL = 'https://forms.gle/9EJBCuRyVyUYH92m7';
+const DEFAULT_STUDENT_EVAL_URL = 'https://forms.gle/26QZapKELpU261XS6';
 
 const rawLogFormUrl = process.env.NEXT_PUBLIC_FORM_LOG_URL?.trim() || DEFAULT_LOG_FORM_URL;
 const rawLogEntryKey = process.env.NEXT_PUBLIC_FORM_LOG_SESSION_ENTRY?.trim() || '';
 const rawCoachEvalUrl = process.env.NEXT_PUBLIC_FORM_COACH_EVAL_URL?.trim() || DEFAULT_COACH_EVAL_URL;
-const rawStudentEvalUrl = process.env.NEXT_PUBLIC_FORM_STUDENT_EVAL_URL?.trim() || '';
+const rawStudentEvalUrl = process.env.NEXT_PUBLIC_FORM_STUDENT_EVAL_URL?.trim() || DEFAULT_STUDENT_EVAL_URL;
 
 export const EXTERNAL_LINKS = {
   coachingLogForm: {
@@ -35,7 +36,7 @@ export const EXTERNAL_LINKS = {
   },
   studentEvalForm: {
     url: rawStudentEvalUrl,
-    fallbackDemoUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSfDreamMilestoneStudentEval/viewform',
+    fallbackDemoUrl: DEFAULT_STUDENT_EVAL_URL,
     isConfigured: Boolean(rawStudentEvalUrl)
   }
 };
