@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>삼코동 · Dream Milestone 코칭 포털 (UI Design Prototype)</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">본문으로 건너뛰기</a>
+
+  <!-- DESIGN ARTIFACT BANNER -->
+  <div class="proto-banner" role="region" aria-label="디자인 검증용 프로토타입 안내">
+    <span><strong>[UI Design Prototype]</strong> 정적 디자인 검증 아티팩트 (픽션 데이터 사용 · 데모 비밀번호: <code>scc2026</code>)</span>
+    <div class="proto-actions">
+      <button type="button" id="protoToggleAuthBtn" class="btn-chip">로그인/포털 화면 전환</button>
+      <button type="button" id="themeToggleTopBtn" class="btn-chip" aria-label="테마 전환">🌙 다크 모드</button>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- SCR-001: LANDING & LOGIN VIEW (/login)                                -->
+  <!-- ===================================================================== -->
+  <section id="loginView" class="login-view" aria-labelledby="landing-hero-title">
+    <header class="landing-header">
+      <div class="brand-lockup">
+        <span class="brand-star-icon" aria-hidden="true">★</span>
+        <strong class="brand-club">삼코동 Samsung Coaching Club</strong>
+        <span class="brand-divider" aria-hidden="true"></span>
+        <span class="brand-portal">삼코동 코칭 포털</span>
+      </div>
+    </header>
+
+    <div class="landing-hero">
+      <div class="hero-copy">
+        <span class="eyebrow-pill">삼코동 · 고객 주도형 다회기 코칭</span>
+        <h1 id="landing-hero-title" class="hero-title">
+          더 나은 내일로 향하는<br />
+          <span class="text-primary">Dream Milestone 코칭 가이드</span>
+        </h1>
+        <p class="hero-desc">
+          삼코동과 함께 걷는 코칭의 길. 프리세션의 첫 대화부터 5회기 Move Forward까지,
+          대학생·대학원생이 스스로 강점과 가치를 발견하고 커리어 이정표를 세우는 여정을 곁에서 돕습니다.
+        </p>
+        <p class="hero-slogan">함께, 더 멀리 — 당신의 여정을 응원합니다</p>
+      </div>
+
+      <section class="login-card" aria-labelledby="enter-title">
+        <h2 id="enter-title" class="login-card-title">삼코동 코칭 포털에 오신 것을 환영합니다</h2>
+        <p class="login-card-sub">코치 전용 공간 접속하기</p>
+        <form id="loginForm" class="login-form" novalidate>
+          <label for="passwordInput" class="form-label">공용 비밀번호를 입력해 주세요</label>
+          <input
+            id="passwordInput"
+            name="password"
+            type="password"
+            required
+            autocomplete="current-password"
+            placeholder="비밀번호를 입력하세요 (데모: scc2026)"
+            aria-describedby="loginError"
+            class="form-input"
+          />
+          <div id="loginError" class="form-error" role="alert" aria-live="polite" hidden></div>
+          <div class="login-btn-row">
+            <button type="submit" id="loginSubmitBtn" class="btn-primary btn-full">입장하기</button>
+            <button type="button" id="fillDemoPwBtn" class="btn-secondary btn-full">데모 비밀번호 자동 입력 후 입장</button>
+          </div>
+        </form>
+        <p class="login-caption">코치 전용 공간입니다. 비밀번호는 삼성코칭동호회(SCC) 운영진에게 문의하세요.</p>
+      </section>
+    </div>
+
+    <!-- North Star Mountain Journey SVG -->
+    <div class="journey-visual-wrap">
+      <div class="journey-svg-card">
+        <svg viewBox="0 0 1200 320" role="img" aria-label="겹겹의 산 사이로 굽은 길이 프리세션과 1~5회기 깃발을 지나 산 위의 북극성으로 이어지는 풍경" class="journey-svg">
+          <!-- North Star -->
+          <path d="M980 35 L987 62 L1014 69 L987 76 L980 103 L973 76 L946 69 L973 62 Z" fill="var(--color-brand-star)" />
+          <text x="1028" y="66" font-size="18" font-weight="700" fill="var(--color-text-main)">더 나은 나</text>
+          <text x="1028" y="88" font-size="13" fill="var(--color-text-body)">북극성 (Dream Milestone)</text>
+          <!-- Mountains -->
+          <path d="M0 230 L150 155 L280 210 L430 125 L590 200 L740 110 L900 180 L980 118 L1110 185 L1200 150 L1200 320 L0 320 Z" fill="var(--color-primary-light)" />
+          <path d="M120 310 Q320 250 470 235 T790 185 T980 122" fill="none" stroke="var(--color-primary)" stroke-width="5" stroke-dasharray="10 6" />
+          <!-- Flags -->
+          <g transform="translate(170,235)">
+            <line x1="0" y1="35" x2="0" y2="0" stroke="var(--color-text-main)" stroke-width="2" />
+            <polygon points="0,0 24,7 0,14" fill="var(--color-primary)" />
+            <text x="-8" y="-6" font-size="13" font-weight="700" fill="var(--color-text-main)">프리세션</text>
+          </g>
+          <g transform="translate(360,205)">
+            <line x1="0" y1="35" x2="0" y2="0" stroke="var(--color-text-main)" stroke-width="2" />
+            <polygon points="0,0 24,7 0,14" fill="var(--color-primary)" />
+            <text x="-8" y="-6" font-size="13" font-weight="700" fill="var(--color-text-main)">1~2회기 (탐색·확장)</text>
+          </g>
+          <g transform="translate(610,175)">
+            <line x1="0" y1="35" x2="0" y2="0" stroke="var(--color-text-main)" stroke-width="2" />
+            <polygon points="0,0 24,7 0,14" fill="var(--color-primary)" />
+            <text x="-8" y="-6" font-size="13" font-weight="700" fill="var(--color-text-main)">3~4회기 (Gap·이정표)</text>
+          </g>
+          <g transform="translate(835,140)">
+            <line x1="0" y1="35" x2="0" y2="0" stroke="var(--color-text-main)" stroke-width="2" />
+            <polygon points="0,0 24,7 0,14" fill="var(--color-primary)" />
+            <text x="-8" y="-6" font-size="13" font-weight="700" fill="var(--color-text-main)">5회기 (Move Forward)</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 3-Step Philosophy -->
+    <section class="philosophy-section" aria-labelledby="philosophy-heading">
+      <div class="container-narrow">
+        <h2 id="philosophy-heading" class="section-h1">준비하고, 대화하고, 성찰합니다</h2>
+        <ol class="philosophy-grid">
+          <li class="philosophy-card">
+            <span class="step-circle" aria-hidden="true">1</span>
+            <strong>코칭 전, 준비</strong>
+            <p>회기별 목적과 핵심 질문, 60분 5단계 시간 흐름을 코칭 가이드에서 미리 살핍니다.</p>
+          </li>
+          <li class="philosophy-card">
+            <span class="step-circle" aria-hidden="true">2</span>
+            <strong>회기와 회기 사이</strong>
+            <p>대화 뒤에는 코칭일지(구글폼)를 남기고, 학생은 Action Experiment로 진로 가설을 확인합니다.</p>
+          </li>
+          <li class="philosophy-card">
+            <span class="step-circle" aria-hidden="true">3</span>
+            <strong>마치며, 성찰</strong>
+            <p>최종 Career Map과 코치·학생 성과평가(구글폼)로 5회기 여정을 돌아보고 다음 걸음을 정합니다.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <footer class="landing-footer">
+      <p>“좋은 질문이 좋은 대화를 만들고, 좋은 대화가 더 나은 변화를 만듭니다.” — <strong>삼코동이 함께합니다</strong></p>
+      <small>삼코동 코치 전용 포털 · 공용 비밀번호로 입장합니다</small>
+    </footer>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- PORTAL APP SHELL (SCR-002 ~ SCR-006)                                  -->
+  <!-- ===================================================================== -->
+  <div id="portalShell" class="app-shell" hidden>
+    <header class="topbar">
+      <div class="topbar-left">
+        <button type="button" id="mobileMenuBtn" class="icon-btn" aria-label="사이드 메뉴 열기" aria-expanded="false">☰</button>
+        <div class="topbar-brand">
+          <span class="brand-kicker">삼성코칭동호회(SCC) · 대학생·대학원생 커리어 코칭</span>
+          <strong class="brand-title">Dream Milestone Coaching Toolkit</strong>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button type="button" id="jumpDownloadsBtn" class="btn-secondary btn-sm">📥 참조자료 다운로드</button>
+        <button type="button" id="logoutBtn" class="btn-chip">로그아웃</button>
+      </div>
+    </header>
+
+    <div class="shell-body">
+      <!-- 3-Tab Sidebar Navigation -->
+      <aside id="sidebar" class="sidebar" aria-label="포털 3대 기능 탭 내비게이션">
+        <nav class="sidebar-nav">
+          <div class="nav-group">
+            <div class="nav-group-label">탭 1 · 프로그램 소개</div>
+            <button type="button" class="nav-item active" data-route="overview" aria-current="page">
+              <span class="nav-badge">T1</span>
+              <span>개요 (Program Overview)</span>
+            </button>
+          </div>
+
+          <div class="nav-group">
+            <div class="nav-group-label">탭 2 · 코칭모델 (프리세션~5회기)</div>
+            <button type="button" class="nav-item" data-route="pre">
+              <span class="nav-badge">PRE</span>
+              <span>프리세션 (Welcome Call)</span>
+            </button>
+            <button type="button" class="nav-item" data-route="session-1">
+              <span class="nav-badge">01</span>
+              <span>1회기 · Discover Me</span>
+            </button>
+            <button type="button" class="nav-item" data-route="session-2">
+              <span class="nav-badge">02</span>
+              <span>2회기 · Explore Possibilities</span>
+            </button>
+            <button type="button" class="nav-item" data-route="session-3">
+              <span class="nav-badge">03</span>
+              <span>3회기 · Find the Gap</span>
+            </button>
+            <button type="button" class="nav-item" data-route="session-4">
+              <span class="nav-badge">04</span>
+              <span>4회기 · Build My Milestones</span>
+            </button>
+            <button type="button" class="nav-item" data-route="session-5">
+              <span class="nav-badge">05</span>
+              <span>5회기 · Move Forward (종결)</span>
+            </button>
+          </div>
+
+          <div class="nav-group">
+            <div class="nav-group-label">탭 3 · 자료실 및 운영 도구</div>
+            <button type="button" class="nav-item" data-route="references">
+              <span class="nav-badge">T3</span>
+              <span>참조자료 (Full Guide·워크시트)</span>
+            </button>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Main Content Container -->
+      <main id="main-content" class="main-content" tabindex="-1">
+        <div id="viewContainer"></div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastContainer" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

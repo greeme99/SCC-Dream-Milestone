@@ -1,0 +1,168 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   DESIGN.md Unified Standard Design System Tokens (Source of Truth)
+   ========================================================================== */
+:root,
+[data-theme="light"] {
+  /* Canvas & Surface */
+  --color-bg-base: #f8fafc;
+  --color-bg-surface: #ffffff;
+  --color-bg-subtle: #f1f5f9;
+  --color-bg-hover: #e2e8f0;
+
+  /* Primary & Accents */
+  --color-primary: #0066ff;
+  --color-primary-hover: #0052cc;
+  --color-primary-light: #e0edff;
+  --gradient-primary: linear-gradient(135deg, #0066ff 0%, #3b82f6 100%);
+  --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
+
+  /* Borders & Shadows */
+  --color-border: #f1f5f9;
+  --color-border-strong: #e2e8f0;
+  --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+  --shadow-hover: 0 10px 25px -3px rgba(0, 102, 255, 0.15);
+
+  /* Typography Colors */
+  --color-text-main: #0f172a;
+  --color-text-body: #334155;
+  --color-text-muted: #64748b;
+  --color-brand-star: #f8b62d;
+  --color-text-on-primary: #ffffff;
+
+  /* Shared Secondary Palette */
+  --color-accent-sky: #38bdf8;
+  --color-accent-cyan: #06b6d4;
+  --color-accent-coral: #ff6b4a;
+  --color-accent-mint: #10b981;
+  --color-accent-purple: #8b5cf6;
+  --color-accent-yellow: #facc15;
+
+  /* Status Colors */
+  --color-success: #10b981;
+  --color-success-bg: rgba(16, 185, 129, 0.12);
+  --color-warning: #f59e0b;
+  --color-warning-bg: rgba(245, 158, 11, 0.12);
+  --color-danger: #ef4444;
+  --color-danger-bg: rgba(239, 68, 68, 0.12);
+  --color-info: #3b82f6;
+  --color-info-bg: rgba(59, 130, 246, 0.12);
+
+  /* Typography Scale */
+  --font-h1: 1.875rem;
+  --font-h2: 1.375rem;
+  --font-h3: 1.125rem;
+  --font-stat: 1.75rem;
+  --font-body: 0.938rem;
+  --font-caption: 0.813rem;
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 18px;
+  --radius-pill: 9999px;
+}
+
+[data-theme="dark"] {
+  /* Canvas & Surface */
+  --color-bg-base: #0f172a;
+  --color-bg-surface: #1e293b;
+  --color-bg-subtle: #334155;
+  --color-bg-hover: #475569;
+
+  /* Primary & Accents (High-contrast Sky/Cyan for Dark Mode legibility) */
+  --color-primary: #38bdf8;
+  --color-primary-hover: #7dd3fc;
+  --color-primary-light: rgba(56, 189, 248, 0.18);
+  --gradient-primary: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+  --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+
+  /* Borders & Shadows */
+  --color-border: #334155;
+  --color-border-strong: #475569;
+  --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
+  --shadow-hover: 0 10px 25px -3px rgba(56, 189, 248, 0.25);
+
+  /* Typography Colors */
+  --color-text-main: #f8fafc;
+  --color-text-body: #e2e8f0;
+  --color-text-muted: #cbd5e1;
+  --color-text-on-primary: #ffffff;
+}
+
+[data-theme="dark"] .bg-primary.text-on-primary {
+  background-color: #0284c7;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .bg-primary-light {
+  box-shadow: inset 0 0 0 1px rgba(125, 211, 252, 0.35);
+}
+
+@layer base {
+  html,
+  body {
+    background-color: var(--color-bg-base);
+    color: var(--color-text-main);
+    font-family: 'Pretendard', 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: var(--font-body);
+    line-height: 1.55;
+    word-break: keep-all;
+    transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+.bg-gradient-primary {
+  background: var(--gradient-primary);
+}
+
+.card-elevate {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-elevate:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+.nav-debossed {
+  background-color: var(--color-bg-base);
+  border: 1px solid var(--color-border-strong);
+  box-shadow:
+    inset 0 2px 4px rgba(15, 23, 42, 0.07),
+    inset 0 1px 2px rgba(15, 23, 42, 0.05),
+    0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.nav-debossed:hover {
+  background-color: var(--color-bg-subtle);
+  box-shadow:
+    inset 0 2px 5px rgba(15, 23, 42, 0.11),
+    inset 0 1px 2px rgba(15, 23, 42, 0.08);
+}
+
+.nav-debossed-active {
+  background-color: var(--color-bg-subtle);
+  border: 1px solid var(--color-border-strong);
+  box-shadow:
+    inset 0 3px 6px rgba(15, 23, 42, 0.16),
+    inset 0 1px 3px rgba(15, 23, 42, 0.12),
+    0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="dark"] .nav-debossed {
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.45),
+    inset 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .nav-debossed-active {
+  box-shadow:
+    inset 0 3px 7px rgba(0, 0, 0, 0.65),
+    inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
