@@ -30,10 +30,11 @@ export function ThemeToggle() {
       type="button"
       onClick={toggleTheme}
       aria-label={theme === 'dark' ? '라이트 테마로 전환' : '다크 테마로 전환'}
-      className="btn-press inline-flex min-h-10 items-center gap-1.5 rounded-pill border border-line-strong bg-surface px-3.5 py-1.5 text-caption font-semibold text-body transition hover:bg-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+      title={theme === 'dark' ? '라이트 테마로 전환' : '다크 테마로 전환'}
+      className="btn-press inline-flex min-h-10 items-center justify-center gap-1.5 rounded-pill border border-line-strong bg-surface px-2.5 py-1.5 text-caption font-semibold text-body transition hover:bg-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary sm:px-3.5"
     >
-      <span aria-hidden="true">{theme === 'dark' ? '☀️' : '🌙'}</span>
-      <span>{theme === 'dark' ? '라이트' : '다크'}</span>
+      <span aria-hidden="true" className="text-base sm:text-sm">{theme === 'dark' ? '☀️' : '🌙'}</span>
+      <span className="hidden sm:inline">{theme === 'dark' ? '라이트' : '다크'}</span>
     </button>
   );
 }

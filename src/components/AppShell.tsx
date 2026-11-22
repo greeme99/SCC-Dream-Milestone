@@ -114,22 +114,23 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <line x1="4" y1="17" x2="20" y2="17" />
             </svg>
           </button>
-          <Link href="/overview" className="flex items-center gap-3">
+          <Link href="/overview" className="flex items-center gap-2.5 sm:gap-3">
             <img
               src="/samkodong-logo.png"
               alt="삼성코칭동호회 로고"
-              className="h-9 w-auto shrink-0 object-contain"
+              className="h-8 w-auto shrink-0 object-contain sm:h-9"
             />
-            <strong className="text-base font-bold text-main sm:text-lg">
-              삼성코칭동호회 - Dream Milestone
+            <strong className="truncate text-sm font-bold text-main sm:text-lg">
+              <span className="hidden sm:inline">삼성코칭동호회 - </span>Dream Milestone
             </strong>
+            <span className="sr-only">삼성코칭동호회 - Dream Milestone</span>
           </Link>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
           <Link
             href="/references"
-            className="btn-press hidden min-h-10 items-center gap-1.5 rounded-pill border border-primary bg-surface px-4 py-1.5 text-caption font-semibold text-primary transition hover:bg-primary-light sm:inline-flex"
+            className="btn-press hidden min-h-10 items-center gap-1.5 rounded-pill border border-primary bg-surface px-4 py-1.5 text-caption font-semibold text-primary transition hover:bg-primary-light md:inline-flex"
           >
             <span aria-hidden="true">📥</span>
             <span>참조자료 다운로드</span>
@@ -138,9 +139,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <button
             type="button"
             onClick={handleLogout}
-            className="btn-press min-h-10 rounded-pill border border-line-strong bg-surface px-3.5 py-1.5 text-caption font-semibold text-body transition hover:bg-hover"
+            aria-label="로그아웃"
+            title="로그아웃"
+            className="btn-press inline-flex min-h-10 items-center justify-center gap-1.5 rounded-pill border border-line-strong bg-surface px-2.5 py-1.5 text-caption font-semibold text-body transition hover:bg-hover sm:px-3.5"
           >
-            로그아웃
+            <span aria-hidden="true" className="text-base sm:text-sm">🚪</span>
+            <span className="hidden sm:inline">로그아웃</span>
           </button>
         </div>
       </header>
