@@ -15,8 +15,10 @@ export interface DriveResourceItem {
   isConfigured: boolean;
 }
 
-const rawLogFormUrl = process.env.NEXT_PUBLIC_FORM_LOG_URL?.trim() || '';
-const rawLogEntryKey = process.env.NEXT_PUBLIC_FORM_LOG_SESSION_ENTRY?.trim() || 'entry.session';
+const DEFAULT_LOG_FORM_URL = 'https://forms.gle/wP7FB523KMFWAAKo9';
+
+const rawLogFormUrl = process.env.NEXT_PUBLIC_FORM_LOG_URL?.trim() || DEFAULT_LOG_FORM_URL;
+const rawLogEntryKey = process.env.NEXT_PUBLIC_FORM_LOG_SESSION_ENTRY?.trim() || '';
 const rawCoachEvalUrl = process.env.NEXT_PUBLIC_FORM_COACH_EVAL_URL?.trim() || '';
 const rawStudentEvalUrl = process.env.NEXT_PUBLIC_FORM_STUDENT_EVAL_URL?.trim() || '';
 
@@ -43,10 +45,20 @@ export function getCoachingLogFormUrl(sessionNumber: number): { url: string; isC
     return { url: '', isConfigured: false };
   }
   const base = EXTERNAL_LINKS.coachingLogForm.baseUrl;
-  const separator = base.includes('?') ? '&' : '?';
   const entryKey = EXTERNAL_LINKS.coachingLogForm.sessionEntryKey;
+
+  // If entryKey is provided and URL is a full viewform URL, support prefilling
+  if (entryKey) {
+    const separator = base.includes('?') ? '&' : '?';
+    return {
+      url: `${base}${separator}usp=pp_url&${encodeURIComponent(entryKey)}=${encodeURIComponent(label)}`,
+      isConfigured: true
+    };
+  }
+
+  // Short URL (forms.gle) or direct URL
   return {
-    url: `${base}${separator}usp=pp_url&${encodeURIComponent(entryKey)}=${encodeURIComponent(label)}`,
+    url: base,
     isConfigured: true
   };
 }
