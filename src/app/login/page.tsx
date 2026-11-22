@@ -345,7 +345,7 @@ export default function LoginPage() {
                 >
                   1
                 </span>
-                <strong className="text-lg font-bold text-main">① 코칭 전, 준비</strong>
+                <strong className="text-lg font-bold text-main">코칭 전, 준비</strong>
               </div>
               <span className="leading-relaxed text-body">
                 회기별 목적과 핵심 코칭 질문, 60분 5단계 시간 흐름을 코칭 가이드에서 미리 살핍니다.
@@ -359,7 +359,7 @@ export default function LoginPage() {
                 >
                   2
                 </span>
-                <strong className="text-lg font-bold text-main">② 회기와 회기 사이</strong>
+                <strong className="text-lg font-bold text-main">회기와 회기 사이</strong>
               </div>
               <span className="leading-relaxed text-body">
                 대화 뒤에는 코칭일지를 남기고, 학생은 Action Experiment로 진로 가설을 확인합니다.
@@ -373,7 +373,7 @@ export default function LoginPage() {
                 >
                   3
                 </span>
-                <strong className="text-lg font-bold text-main">③ 마치며, 성찰</strong>
+                <strong className="text-lg font-bold text-main">마치며, 성찰</strong>
               </div>
               <span className="leading-relaxed text-body">
                 최종 Career Map 완성 후 코치·학생 성과평가로 5회기 과정을 돌아보고 다음 걸음을 정합니다.
