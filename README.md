@@ -40,12 +40,14 @@ Dream Milestone은 대학생·대학원생이 자기이해를 바탕으로 현�
 
 ---
 
-## 🔗 구글 설문지 연동 현황
+## 🔗 구글 설문지 및 드라이브 자료 연동 현황
 
-운영진 확정 실 설문지가 기본 탑재되어 현장에서 즉시 활용할 수 있습니다 (`src/config/external-links.ts`):
+운영진 확정 실 설문지 및 드라이브 자료가 기본 탑재되어 현장에서 즉시 활용할 수 있습니다 (`src/config/external-links.ts`):
 - **1~4회기 코칭일지**: [https://forms.gle/t12jNnjeY22n6DkG8](https://forms.gle/t12jNnjeY22n6DkG8)
 - **5회기 코치/멘토 종료설문조사**: [https://forms.gle/9EJBCuRyVyUYH92m7](https://forms.gle/9EJBCuRyVyUYH92m7)
 - **5회기 고객/멘티 종료설문조사**: [https://forms.gle/26QZapKELpU261XS6](https://forms.gle/26QZapKELpU261XS6) (원클릭 링크 복사 토스트 지원)
+- **Dream Milestone Full Guide.pdf**: [Google Drive 바로가기](https://drive.google.com/file/d/1oxW52eu4mn5B5KvOBi5dECHMRo5Wu8Bn/view?usp=sharing)
+- **프리세션 사전 준비지**: [Google Drive 바로가기](https://drive.google.com/file/d/1KCbALO9SMYKk-eTLhPX1grv2qe8hcfhP/view?usp=sharing)
 
 ---
 

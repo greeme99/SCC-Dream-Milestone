@@ -69,11 +69,7 @@ export default function ReferencesPage() {
                   onClick={() => handleOpenResource(res)}
                   className="btn-press inline-flex min-h-10 items-center gap-1.5 rounded-pill border border-primary bg-surface px-4 py-2 text-caption font-semibold text-primary transition hover:bg-primary-light"
                 >
-                  <span>
-                    {res.order === 1 && res.url.endsWith('.pdf')
-                      ? 'Full Guide PDF 열기 / 다운로드 ↗'
-                      : '열기 / 다운로드 ↗'}
-                  </span>
+                  <span>열기 / 다운로드 ↗</span>
                 </button>
               </div>
             </article>

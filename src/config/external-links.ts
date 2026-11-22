@@ -18,11 +18,17 @@ export interface DriveResourceItem {
 const DEFAULT_LOG_FORM_URL = 'https://forms.gle/t12jNnjeY22n6DkG8';
 const DEFAULT_COACH_EVAL_URL = 'https://forms.gle/9EJBCuRyVyUYH92m7';
 const DEFAULT_STUDENT_EVAL_URL = 'https://forms.gle/26QZapKELpU261XS6';
+const DEFAULT_FULL_GUIDE_URL =
+  'https://drive.google.com/file/d/1oxW52eu4mn5B5KvOBi5dECHMRo5Wu8Bn/view?usp=sharing';
+const DEFAULT_PRE_SHEET_URL =
+  'https://drive.google.com/file/d/1KCbALO9SMYKk-eTLhPX1grv2qe8hcfhP/view?usp=sharing';
 
 const rawLogFormUrl = process.env.NEXT_PUBLIC_FORM_LOG_URL?.trim() || DEFAULT_LOG_FORM_URL;
 const rawLogEntryKey = process.env.NEXT_PUBLIC_FORM_LOG_SESSION_ENTRY?.trim() || '';
 const rawCoachEvalUrl = process.env.NEXT_PUBLIC_FORM_COACH_EVAL_URL?.trim() || DEFAULT_COACH_EVAL_URL;
 const rawStudentEvalUrl = process.env.NEXT_PUBLIC_FORM_STUDENT_EVAL_URL?.trim() || DEFAULT_STUDENT_EVAL_URL;
+const rawFullGuideUrl = process.env.NEXT_PUBLIC_DRIVE_FULL_GUIDE_URL?.trim() || DEFAULT_FULL_GUIDE_URL;
+const rawPreSheetUrl = process.env.NEXT_PUBLIC_DRIVE_PRE_SHEET_URL?.trim() || DEFAULT_PRE_SHEET_URL;
 
 export const EXTERNAL_LINKS = {
   coachingLogForm: {
@@ -73,8 +79,8 @@ export const DRIVE_RESOURCES: DriveResourceItem[] = [
     description: '프리세션~5회기 전체 코치 가이드북 원문 및 운영 표준 매뉴얼',
     format: 'PDF',
     category: '가이드북 원문',
-    url: process.env.NEXT_PUBLIC_DRIVE_FULL_GUIDE_URL?.trim() || '',
-    isConfigured: Boolean(process.env.NEXT_PUBLIC_DRIVE_FULL_GUIDE_URL?.trim())
+    url: rawFullGuideUrl,
+    isConfigured: Boolean(rawFullGuideUrl)
   },
   {
     id: 'RES-02',
@@ -83,8 +89,8 @@ export const DRIVE_RESOURCES: DriveResourceItem[] = [
     description: '학생 사전 배포용 질문지(4대 항목) 및 1회기 경험 탐색 안내서',
     format: 'DOCX / PDF',
     category: '프리세션 양식',
-    url: process.env.NEXT_PUBLIC_DRIVE_PRE_SHEET_URL?.trim() || '',
-    isConfigured: Boolean(process.env.NEXT_PUBLIC_DRIVE_PRE_SHEET_URL?.trim())
+    url: rawPreSheetUrl,
+    isConfigured: Boolean(rawPreSheetUrl)
   },
   {
     id: 'RES-03',
