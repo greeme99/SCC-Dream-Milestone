@@ -139,30 +139,52 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
         </p>
       </section>
 
-      {/* Interactive 5-Stage Tab Bar */}
+      {/* Interactive 5-Stage Stepper Tab Bar */}
       <div
         role="tablist"
         aria-label={`${session.sessionNumber}회기 진행 단계 탭`}
-        className="mb-4 flex flex-wrap gap-2 rounded-lg bg-subtle p-2"
+        className="mb-4 flex flex-wrap items-center gap-1.5 rounded-lg border border-line-strong bg-subtle p-2 sm:gap-2"
       >
         {session.stages.map((st, idx) => {
           const isSelected = activeStage === st.key;
+          const isPast = stageIndex > idx;
           return (
-            <button
-              key={st.key}
-              type="button"
-              role="tab"
-              aria-selected={isSelected}
-              onClick={() => setStage(st.key)}
-              onKeyDown={(e) => handleTabKeyDown(e, idx)}
-              className={`btn-press rounded-pill px-4 py-2.5 text-caption font-semibold transition ${
-                isSelected
-                  ? 'bg-primary text-on-primary shadow-card'
-                  : 'text-body hover:bg-hover'
-              }`}
-            >
-              {st.label} ({st.duration})
-            </button>
+            <React.Fragment key={st.key}>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={isSelected}
+                onClick={() => setStage(st.key)}
+                onKeyDown={(e) => handleTabKeyDown(e, idx)}
+                className={`btn-press inline-flex items-center gap-1.5 rounded-pill px-3.5 py-2 text-caption font-semibold transition sm:px-4 sm:py-2.5 ${
+                  isSelected
+                    ? 'bg-primary text-on-primary shadow-card ring-2 ring-primary/20'
+                    : isPast
+                      ? 'border border-line-strong bg-surface text-main hover:bg-hover'
+                      : 'text-muted hover:bg-hover hover:text-main'
+                }`}
+              >
+                {isPast && !isSelected && (
+                  <span aria-hidden="true" className="text-xs font-bold text-primary">
+                    ✓
+                  </span>
+                )}
+                <span>
+                  {st.label} ({st.duration})
+                </span>
+              </button>
+
+              {idx < session.stages.length - 1 && (
+                <span
+                  aria-hidden="true"
+                  className={`select-none text-xs font-bold transition sm:text-sm ${
+                    isPast ? 'text-primary' : 'text-muted/40'
+                  }`}
+                >
+                  ›
+                </span>
+              )}
+            </React.Fragment>
           );
         })}
       </div>
