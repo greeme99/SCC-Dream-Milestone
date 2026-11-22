@@ -163,14 +163,14 @@ export default function LoginPage() {
         </Suspense>
       </section>
 
-      {/* Mountain & North Star Journey Illustration (scc-coaching.vercel.app/login benchmark) */}
+      {/* Mountain & North Star Journey Illustration (Responsive Full-Width Fit) */}
       <div className="mx-auto max-w-[1200px] px-4 pb-8 sm:px-8 sm:pb-12">
-        <div className="flex justify-end overflow-hidden rounded-lg border border-line bg-surface shadow-card">
+        <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-card">
           <svg
             viewBox="0 0 1440 420"
             role="img"
             aria-label="겹겹의 산 사이로 굽은 길이 프리세션, 1~2회기, 3~4회기, 5회기 Move Forward 깃발을 지나 산 위의 북극성으로 이어지는 풍경"
-            className="block h-auto w-full min-w-[680px] shrink-0"
+            className="block h-auto w-full"
           >
             {/* North Star */}
             <path
@@ -338,37 +338,43 @@ export default function LoginPage() {
           <h2 className="text-h1 font-bold text-main">준비하고, 대화하고, 성찰합니다</h2>
           <ol className="grid gap-5 md:grid-cols-3">
             <li className="flex flex-col gap-3 rounded-lg border border-line bg-base p-7">
-              <span
-                aria-hidden="true"
-                className="grid h-11 w-11 place-items-center rounded-pill bg-primary font-bold text-on-primary"
-              >
-                1
-              </span>
-              <strong className="text-lg text-main">코칭 전, 준비</strong>
+              <div className="flex items-center gap-3">
+                <span
+                  aria-hidden="true"
+                  className="grid h-10 w-10 shrink-0 place-items-center rounded-pill bg-primary text-base font-bold text-on-primary shadow-sm"
+                >
+                  1
+                </span>
+                <strong className="text-lg font-bold text-main">① 코칭 전, 준비</strong>
+              </div>
               <span className="leading-relaxed text-body">
                 회기별 목적과 핵심 코칭 질문, 60분 5단계 시간 흐름을 코칭 가이드에서 미리 살핍니다.
               </span>
             </li>
             <li className="flex flex-col gap-3 rounded-lg border border-line bg-base p-7">
-              <span
-                aria-hidden="true"
-                className="grid h-11 w-11 place-items-center rounded-pill bg-primary font-bold text-on-primary"
-              >
-                2
-              </span>
-              <strong className="text-lg text-main">회기와 회기 사이</strong>
+              <div className="flex items-center gap-3">
+                <span
+                  aria-hidden="true"
+                  className="grid h-10 w-10 shrink-0 place-items-center rounded-pill bg-primary text-base font-bold text-on-primary shadow-sm"
+                >
+                  2
+                </span>
+                <strong className="text-lg font-bold text-main">② 회기와 회기 사이</strong>
+              </div>
               <span className="leading-relaxed text-body">
                 대화 뒤에는 코칭일지를 남기고, 학생은 Action Experiment로 진로 가설을 확인합니다.
               </span>
             </li>
             <li className="flex flex-col gap-3 rounded-lg border border-line bg-base p-7">
-              <span
-                aria-hidden="true"
-                className="grid h-11 w-11 place-items-center rounded-pill bg-primary font-bold text-on-primary"
-              >
-                3
-              </span>
-              <strong className="text-lg text-main">마치며, 성찰</strong>
+              <div className="flex items-center gap-3">
+                <span
+                  aria-hidden="true"
+                  className="grid h-10 w-10 shrink-0 place-items-center rounded-pill bg-primary text-base font-bold text-on-primary shadow-sm"
+                >
+                  3
+                </span>
+                <strong className="text-lg font-bold text-main">③ 마치며, 성찰</strong>
+              </div>
               <span className="leading-relaxed text-body">
                 최종 Career Map 완성 후 코치·학생 성과평가로 5회기 과정을 돌아보고 다음 걸음을 정합니다.
               </span>
