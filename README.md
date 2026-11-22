@@ -48,6 +48,7 @@ Dream Milestone은 대학생·대학원생이 자기이해를 바탕으로 현�
 - **5회기 고객/멘티 종료설문조사**: [https://forms.gle/26QZapKELpU261XS6](https://forms.gle/26QZapKELpU261XS6) (원클릭 링크 복사 토스트 지원)
 - **Dream Milestone Full Guide.pdf**: [Google Drive 바로가기](https://drive.google.com/file/d/1oxW52eu4mn5B5KvOBi5dECHMRo5Wu8Bn/view?usp=sharing)
 - **프리세션 사전 준비지**: [Google Drive 바로가기](https://drive.google.com/file/d/1KCbALO9SMYKk-eTLhPX1grv2qe8hcfhP/view?usp=sharing)
+- **코칭 질문 라이브러리**: [Google Drive 바로가기](https://drive.google.com/file/d/1RBe4MmX3Ze-tG7H2dQADI97GLNi95jH5/view?usp=sharing)
 
 ---
 

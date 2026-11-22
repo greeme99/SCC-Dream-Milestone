@@ -22,6 +22,8 @@ const DEFAULT_FULL_GUIDE_URL =
   'https://drive.google.com/file/d/1oxW52eu4mn5B5KvOBi5dECHMRo5Wu8Bn/view?usp=sharing';
 const DEFAULT_PRE_SHEET_URL =
   'https://drive.google.com/file/d/1KCbALO9SMYKk-eTLhPX1grv2qe8hcfhP/view?usp=sharing';
+const DEFAULT_QUESTION_CARDS_URL =
+  'https://drive.google.com/file/d/1RBe4MmX3Ze-tG7H2dQADI97GLNi95jH5/view?usp=sharing';
 
 const rawLogFormUrl = process.env.NEXT_PUBLIC_FORM_LOG_URL?.trim() || DEFAULT_LOG_FORM_URL;
 const rawLogEntryKey = process.env.NEXT_PUBLIC_FORM_LOG_SESSION_ENTRY?.trim() || '';
@@ -29,6 +31,8 @@ const rawCoachEvalUrl = process.env.NEXT_PUBLIC_FORM_COACH_EVAL_URL?.trim() || D
 const rawStudentEvalUrl = process.env.NEXT_PUBLIC_FORM_STUDENT_EVAL_URL?.trim() || DEFAULT_STUDENT_EVAL_URL;
 const rawFullGuideUrl = process.env.NEXT_PUBLIC_DRIVE_FULL_GUIDE_URL?.trim() || DEFAULT_FULL_GUIDE_URL;
 const rawPreSheetUrl = process.env.NEXT_PUBLIC_DRIVE_PRE_SHEET_URL?.trim() || DEFAULT_PRE_SHEET_URL;
+const rawQuestionCardsUrl =
+  process.env.NEXT_PUBLIC_DRIVE_QUESTION_CARDS_URL?.trim() || DEFAULT_QUESTION_CARDS_URL;
 
 export const EXTERNAL_LINKS = {
   coachingLogForm: {
@@ -115,11 +119,11 @@ export const DRIVE_RESOURCES: DriveResourceItem[] = [
   {
     id: 'RES-05',
     order: 5,
-    title: '핵심 질문 라이브러리 & 커리어 가치 탐색 카드',
-    description: '회기별 심화 코칭 질문 모음집 및 가치·강점 탐색 카드 리소스',
+    title: '코칭 질문 라이브러리',
+    description: '대학생·대학원생 맞춤형 5회기 커리어 코칭 실전 질문 모음 (6대 핵심 질문 라이브러리)',
     format: 'PDF',
     category: '코칭 보조도구',
-    url: process.env.NEXT_PUBLIC_DRIVE_QUESTION_CARDS_URL?.trim() || '',
-    isConfigured: Boolean(process.env.NEXT_PUBLIC_DRIVE_QUESTION_CARDS_URL?.trim())
+    url: rawQuestionCardsUrl,
+    isConfigured: Boolean(rawQuestionCardsUrl)
   }
 ];
