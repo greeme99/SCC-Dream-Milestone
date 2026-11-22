@@ -166,3 +166,45 @@
     inset 0 3px 7px rgba(0, 0, 0, 0.65),
     inset 0 1px 3px rgba(0, 0, 0, 0.5);
 }
+
+/* ==========================================================================
+   Stage-to-Stage Stepper Navigation Buttons (Distinct from Session Navigation)
+   ========================================================================== */
+.btn-stage-prev {
+  background-color: var(--color-bg-subtle);
+  border: 1.5px solid var(--color-border-strong);
+  color: var(--color-text-body);
+  border-radius: var(--radius-md);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-stage-prev:hover {
+  background-color: var(--color-bg-hover);
+  color: var(--color-text-main);
+  border-color: var(--color-primary);
+}
+
+.btn-stage-next {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  color: #ffffff;
+  border: 1.5px solid #334155;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.22);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-stage-next:hover {
+  background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+  border-color: var(--color-primary);
+  box-shadow: 0 6px 16px -2px rgba(15, 23, 42, 0.32);
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .btn-stage-next {
+  background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+  color: #f8fafc;
+  border: 1.5px solid #475569;
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.5);
+}
+[data-theme="dark"] .btn-stage-next:hover {
+  background: linear-gradient(135deg, #475569 0%, #334155 100%);
+  border-color: var(--color-primary);
+}

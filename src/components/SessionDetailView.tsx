@@ -263,38 +263,56 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
             />
           </div>
 
-          {/* Stage-to-Stage Connection Buttons */}
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5">
-            {prevStage ? (
-              <button
-                type="button"
-                onClick={() => setStage(prevStage.key)}
-                className="btn-press inline-flex min-h-11 items-center gap-2 rounded-pill border border-line-strong bg-surface px-5 py-2.5 text-caption font-semibold text-main transition hover:bg-subtle"
-              >
-                <span aria-hidden="true">←</span>
-                <span>이전 단계: {prevStage.label} ({prevStage.duration})</span>
-              </button>
-            ) : (
-              <div />
-            )}
+          {/* Stage-to-Stage Connection Buttons (회기 내 단계 이동: 직사각형 스텝 바 스타일) */}
+          <div className="mt-8 rounded-lg border border-line-strong bg-subtle/50 p-4">
+            <div className="mb-3 flex items-center justify-between text-caption font-semibold">
+              <span className="text-muted">
+                회기 내 단계 이동 (Stage Stepper)
+              </span>
+              <span className="text-primary-hover">
+                {currentStageGuide.stepNumber} / 5 단계
+              </span>
+            </div>
 
-            {nextStage ? (
-              <button
-                type="button"
-                onClick={() => setStage(nextStage.key)}
-                className="bg-gradient-primary card-elevate btn-press inline-flex min-h-11 items-center gap-2 rounded-pill px-6 py-2.5 text-caption font-semibold text-on-primary shadow-card"
-              >
-                <span>다음 단계: {nextStage.label} ({nextStage.duration})</span>
-                <span aria-hidden="true">→</span>
-              </button>
-            ) : (
-              <div className="flex items-center gap-2 text-caption font-bold text-primary-hover">
-                <span>🏁 5단계 마무리 단계</span>
-                <span className="max-sm:hidden">
-                  ({session.sessionNumber <= 4 ? '아래 Between Session 및 일지 작성으로 이어집니다' : '아래 최종 성과평가로 이어집니다'} ↓)
-                </span>
-              </div>
-            )}
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              {prevStage ? (
+                <button
+                  type="button"
+                  onClick={() => setStage(prevStage.key)}
+                  className="btn-stage-prev btn-press inline-flex min-h-11 items-center gap-2 px-4 py-2 text-caption font-semibold"
+                >
+                  <span aria-hidden="true">←</span>
+                  <span className="rounded bg-surface px-1.5 py-0.5 text-xs font-bold text-muted">
+                    STAGE {prevStage.stepNumber}
+                  </span>
+                  <span>이전 단계: {prevStage.label} ({prevStage.duration})</span>
+                </button>
+              ) : (
+                <div />
+              )}
+
+              {nextStage ? (
+                <button
+                  type="button"
+                  onClick={() => setStage(nextStage.key)}
+                  className="btn-stage-next btn-press inline-flex min-h-11 items-center gap-2.5 px-5 py-2 text-caption font-bold"
+                >
+                  <span>다음 단계:</span>
+                  <span className="rounded bg-sky-500/25 px-1.5 py-0.5 text-xs font-bold text-sky-200">
+                    STAGE {nextStage.stepNumber}
+                  </span>
+                  <span>{nextStage.label} ({nextStage.duration})</span>
+                  <span aria-hidden="true">→</span>
+                </button>
+              ) : (
+                <div className="inline-flex items-center gap-2 rounded-md bg-primary-light px-4 py-2.5 text-caption font-bold text-primary-hover">
+                  <span>🏁 5단계 마무리 완료</span>
+                  <span className="max-sm:hidden">
+                    ({session.sessionNumber <= 4 ? '아래 Between Session 및 일지 작성으로 이어집니다' : '아래 최종 성과평가로 이어집니다'} ↓)
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
         </section>
       )}
