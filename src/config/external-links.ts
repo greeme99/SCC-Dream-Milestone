@@ -15,7 +15,7 @@ export interface DriveResourceItem {
   isConfigured: boolean;
 }
 
-const DEFAULT_LOG_FORM_URL = 'https://forms.gle/wP7FB523KMFWAAKo9';
+const DEFAULT_LOG_FORM_URL = 'https://forms.gle/t12jNnjeY22n6DkG8';
 const DEFAULT_COACH_EVAL_URL = 'https://forms.gle/9EJBCuRyVyUYH92m7';
 const DEFAULT_STUDENT_EVAL_URL = 'https://forms.gle/26QZapKELpU261XS6';
 
