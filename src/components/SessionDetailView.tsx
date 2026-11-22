@@ -263,49 +263,38 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
             />
           </div>
 
-          {/* Stage-to-Stage Connection Buttons (회기 내 단계 이동: 연한 회색톤) */}
-          <div className="mt-8 rounded-lg border border-line-strong bg-subtle/40 p-4">
-            <div className="mb-3 flex items-center justify-between text-caption font-semibold text-muted">
-              <span>
-                회기 내 단계 이동
-              </span>
-              <span>
-                {currentStageGuide.stepNumber} / 5 단계
-              </span>
-            </div>
+          {/* Stage-to-Stage Connection Buttons */}
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
+            {prevStage ? (
+              <button
+                type="button"
+                onClick={() => setStage(prevStage.key)}
+                className="btn-stage-prev btn-press inline-flex min-h-11 items-center gap-2 px-4 py-2 text-caption font-semibold"
+              >
+                <span aria-hidden="true">←</span>
+                <span>{prevStage.label} ({prevStage.duration})</span>
+              </button>
+            ) : (
+              <div />
+            )}
 
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              {prevStage ? (
-                <button
-                  type="button"
-                  onClick={() => setStage(prevStage.key)}
-                  className="btn-stage-prev btn-press inline-flex min-h-11 items-center gap-2 px-4 py-2 text-caption font-semibold"
-                >
-                  <span aria-hidden="true">←</span>
-                  <span>{prevStage.label} ({prevStage.duration})</span>
-                </button>
-              ) : (
-                <div />
-              )}
-
-              {nextStage ? (
-                <button
-                  type="button"
-                  onClick={() => setStage(nextStage.key)}
-                  className="btn-stage-next btn-press inline-flex min-h-11 items-center gap-2 px-5 py-2 text-caption font-semibold"
-                >
-                  <span>{nextStage.label} ({nextStage.duration})</span>
-                  <span aria-hidden="true">→</span>
-                </button>
-              ) : (
-                <div className="inline-flex items-center gap-2 rounded-md border border-line-strong bg-subtle px-4 py-2.5 text-caption font-semibold text-muted">
-                  <span>🏁 5단계 마무리 완료</span>
-                  <span className="max-sm:hidden">
-                    ({session.sessionNumber <= 4 ? '아래 Between Session 및 일지 작성으로 이어집니다' : '아래 최종 성과평가로 이어집니다'} ↓)
-                  </span>
-                </div>
-              )}
-            </div>
+            {nextStage ? (
+              <button
+                type="button"
+                onClick={() => setStage(nextStage.key)}
+                className="btn-stage-next btn-press inline-flex min-h-11 items-center gap-2 px-5 py-2 text-caption font-semibold"
+              >
+                <span>{nextStage.label} ({nextStage.duration})</span>
+                <span aria-hidden="true">→</span>
+              </button>
+            ) : (
+              <div className="inline-flex items-center gap-2 rounded-md border border-line-strong bg-subtle px-4 py-2.5 text-caption font-semibold text-muted">
+                <span>🏁 5단계 마무리 완료</span>
+                <span className="max-sm:hidden">
+                  ({session.sessionNumber <= 4 ? '아래 Between Session 및 일지 작성으로 이어집니다' : '아래 최종 성과평가로 이어집니다'} ↓)
+                </span>
+              </div>
+            )}
           </div>
         </section>
       )}
