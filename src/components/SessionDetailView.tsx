@@ -213,7 +213,7 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-4">
             <div>
               <span className="text-caption font-bold text-primary-hover">
-                STAGE {currentStageGuide.stepNumber} OF 5
+                {currentStageGuide.stepNumber}단계 / 총 5단계
               </span>
               <h2 className="text-h2 font-semibold text-main">
                 {currentStageGuide.label} (권장 소요 시간: {currentStageGuide.duration})
@@ -263,13 +263,13 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
             />
           </div>
 
-          {/* Stage-to-Stage Connection Buttons (회기 내 단계 이동: 직사각형 스텝 바 스타일) */}
-          <div className="mt-8 rounded-lg border border-line-strong bg-subtle/50 p-4">
-            <div className="mb-3 flex items-center justify-between text-caption font-semibold">
-              <span className="text-muted">
-                회기 내 단계 이동 (Stage Stepper)
+          {/* Stage-to-Stage Connection Buttons (회기 내 단계 이동: 연한 회색톤) */}
+          <div className="mt-8 rounded-lg border border-line-strong bg-subtle/40 p-4">
+            <div className="mb-3 flex items-center justify-between text-caption font-semibold text-muted">
+              <span>
+                회기 내 단계 이동
               </span>
-              <span className="text-primary-hover">
+              <span>
                 {currentStageGuide.stepNumber} / 5 단계
               </span>
             </div>
@@ -282,9 +282,6 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
                   className="btn-stage-prev btn-press inline-flex min-h-11 items-center gap-2 px-4 py-2 text-caption font-semibold"
                 >
                   <span aria-hidden="true">←</span>
-                  <span className="rounded bg-surface px-1.5 py-0.5 text-xs font-bold text-muted">
-                    STAGE {prevStage.stepNumber}
-                  </span>
                   <span>이전 단계: {prevStage.label} ({prevStage.duration})</span>
                 </button>
               ) : (
@@ -295,17 +292,13 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
                 <button
                   type="button"
                   onClick={() => setStage(nextStage.key)}
-                  className="btn-stage-next btn-press inline-flex min-h-11 items-center gap-2.5 px-5 py-2 text-caption font-bold"
+                  className="btn-stage-next btn-press inline-flex min-h-11 items-center gap-2 px-5 py-2 text-caption font-semibold"
                 >
-                  <span>다음 단계:</span>
-                  <span className="rounded bg-sky-500/25 px-1.5 py-0.5 text-xs font-bold text-sky-200">
-                    STAGE {nextStage.stepNumber}
-                  </span>
-                  <span>{nextStage.label} ({nextStage.duration})</span>
+                  <span>다음 단계: {nextStage.label} ({nextStage.duration})</span>
                   <span aria-hidden="true">→</span>
                 </button>
               ) : (
-                <div className="inline-flex items-center gap-2 rounded-md bg-primary-light px-4 py-2.5 text-caption font-bold text-primary-hover">
+                <div className="inline-flex items-center gap-2 rounded-md border border-line-strong bg-subtle px-4 py-2.5 text-caption font-semibold text-muted">
                   <span>🏁 5단계 마무리 완료</span>
                   <span className="max-sm:hidden">
                     ({session.sessionNumber <= 4 ? '아래 Between Session 및 일지 작성으로 이어집니다' : '아래 최종 성과평가로 이어집니다'} ↓)
