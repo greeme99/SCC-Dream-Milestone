@@ -1,6 +1,6 @@
 /**
  * ENT-003: CoachingSessionGuide
- * Tab 2 (코칭모델: 프리세션 + 1~5회기 5단계 인터랙티브 프레임 + 산출물 + Between Session + 일지/성과평가)
+ * Tab 2 (코칭모델: 사전 세션 + 1~5회기 5단계 인터랙티브 프레임 + 산출물 + Between Session + 일지/성과평가)
  * Sourced from Dream_Milestone_Program_Guide.md Part 2.
  */
 
@@ -58,7 +58,7 @@ export const COMMON_STAGE_FRAME = [
 
 export const PRE_SESSION_DATA = {
   badge: 'TAB 2 · PRE-SESSION',
-  title: '프리세션 (Pre-Session): 합의 및 1회기 준비',
+  title: '사전 세션 (Pre-Session): 합의 및 1회기 준비',
   purpose: '첫 만남의 긴장을 낮추고 프로그램의 4대 원칙·비밀보장·역할 경계에 합의하며, 1회기에 가져올 경험 탐색 재료를 준비합니다.',
   prepCheckpoints: [
     {
@@ -151,7 +151,7 @@ export const COACHING_SESSIONS: Record<string, CoachingSessionData> = {
         stepNumber: 1,
         label: '1. 도입',
         duration: '10분',
-        purpose: '심리적 안전감 형성, 프리세션 연결, 오늘 세션 의제 및 원하는 결과 합의',
+        purpose: '심리적 안전감 형성, 사전 세션 연결, 오늘 세션 의제 및 원하는 결과 합의',
         questions: [
           '오늘 1회기 자리에 어떤 마음과 컨디션으로 오셨나요?',
           'Welcome Call 이후 오늘까지 진로나 나 자신에 대해 새롭게 떠오른 생각이 있나요?',
@@ -259,7 +259,7 @@ export const COACHING_SESSIONS: Record<string, CoachingSessionData> = {
       { role: '코치 기록', item: '합의한 Between Session 1 Action Experiment', hint: '관찰 방식 및 횟수' },
       { role: '코치 기록', item: '코치 자기성찰', hint: '조언 욕구 관리, 경청 균형, 놓친 신호' }
     ],
-    prevLink: { href: '/model/pre', label: '프리세션 가이드' },
+    prevLink: { href: '/model/pre', label: '사전 세션 가이드' },
     nextLink: { href: '/model/session-2', label: '2회기 Explore Possibilities' }
   },
 
@@ -699,7 +699,7 @@ export const COACHING_SESSIONS: Record<string, CoachingSessionData> = {
         duration: '15분',
         purpose: '1~4회기 전체 여정 성찰 및 Before & After 성장 서사 확인',
         questions: [
-          '처음 프리세션·1회기를 시작할 때의 나와 지금의 나를 비교하면 가장 크게 달라진 점은 무엇인가요?',
+          '처음 사전 세션·1회기를 시작할 때의 나와 지금의 나를 비교하면 가장 크게 달라진 점은 무엇인가요?',
           '1회기(Strength & Value) → 2회기(Possibility) → 3회기(Gap) → 4회기(Milestone)를 거치며 가장 기억에 남는 발견이나 전환점은 언제였나요?',
           '코칭 과정에서 “내가 이런 힘을 가진 사람이었구나” 하고 새롭게 발견한 모습은 무엇인가요?'
         ],

@@ -39,14 +39,14 @@ export interface KpiItem {
 
 export const PROGRAM_OVERVIEW = {
   eyebrow: 'TAB 1 · PROGRAM OVERVIEW',
-  heroTitle: '현재와 목표 사이의 Gap을 발견하고 자신만의 커리어 Milestone과 Action을 설계하도록 곁에서 돕습니다',
+  heroTitle: '목표와 현실의 격차를 좁히고, 나만의 커리어 로드맵과 구체적인 액션 플랜을 설계합니다.',
   heroQuote: '진로를 처방하지 않고, 학생이 행동 실험과 성찰을 통해 스스로 길을 설계하도록 돕는 과정',
   definition:
-    'Dream Milestone은 대학생·대학원생이 자신만의 커리어 기준(Strength & Value)을 세우고, 현실적인 이정표(Milestone)를 설계하며, 실제 행동(Action)으로 가설을 검증하도록 지원하는 5회기 다회기 커리어 코칭 프로그램이다.',
+    'Dream Milestone은 대학생ㆍ대학원생을 위해 5회기로 구성한 커리어 코칭 프로그램 입니다. 자신만의 커리어 기준(Strength&Value) 수립부터 현실적인 이정표 설계, 행동(Action)을 통한 가설 검증까지 함께합니다.',
   specs: [
-    { label: '주관 / 대상', value: '삼성코칭동호회(SCC) 코치 / 대학생·대학원생' },
+    { label: '주관 / 대상', value: '한국코치협회 인증코치 / 대학생·대학원생' },
     { label: '운영 형태', value: '1:1 코칭 기본 (필요 시 소그룹 보조 운영)' },
-    { label: '세션 구성', value: '프리세션(15분 Welcome Call) + 본 세션 5회기(회기당 60분)' },
+    { label: '세션 구성', value: '사전 세션(15분 Welcome Call) + 본 세션 5회기(회기당 60분)' },
     { label: '회기 간격', value: '1~2주 간격 권장 (회기 사이 30~90분 규모의 Action Experiment 수행)' }
   ],
   principles: [
@@ -119,7 +119,7 @@ export const PROGRAM_OVERVIEW = {
     {
       order: 0,
       slug: '/model/pre',
-      sessionLabel: '프리세션',
+      sessionLabel: '사전 세션',
       themeTitle: 'Preparation & Agreement',
       themeDesc: '라포 형성, 운영 원칙 합의, 사전 질문지 검토 및 15분 Welcome Call',
       coreQuestion: '“5회기를 마칠 때 무엇이 선명해지면 좋을까?”',

@@ -83,7 +83,7 @@ export const DRIVE_RESOURCES: DriveResourceItem[] = [
     id: 'RES-01',
     order: 1,
     title: 'Dream Milestone Full Guide.pdf',
-    description: '프리세션~5회기 전체 코치 가이드북 원문 및 운영 표준 매뉴얼',
+    description: '사전 세션~5회기 전체 코치 가이드북 원문 및 운영 표준 매뉴얼',
     format: 'PDF',
     category: '가이드북 원문',
     url: rawFullGuideUrl,
@@ -92,10 +92,10 @@ export const DRIVE_RESOURCES: DriveResourceItem[] = [
   {
     id: 'RES-02',
     order: 2,
-    title: '프리세션 사전 준비지',
+    title: '사전 세션 준비지',
     description: '학생 사전 배포용 질문지(4대 항목) 및 1회기 경험 탐색 안내서',
     format: 'DOCX / PDF',
-    category: '프리세션 양식',
+    category: '사전 세션 양식',
     url: rawPreSheetUrl,
     isConfigured: Boolean(rawPreSheetUrl)
   },

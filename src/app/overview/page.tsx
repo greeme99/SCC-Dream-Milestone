@@ -25,7 +25,7 @@ export default function OverviewPage() {
             <thead>
               <tr className="border-b border-line-strong bg-subtle">
                 <th className="w-44 px-4 py-3 text-caption font-bold text-main">구분</th>
-                <th className="px-4 py-3 text-caption font-bold text-main">표준 운영 사양</th>
+                <th className="px-4 py-3 text-caption font-bold text-main">내용</th>
               </tr>
             </thead>
             <tbody>

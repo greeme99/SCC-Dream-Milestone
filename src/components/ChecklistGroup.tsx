@@ -51,7 +51,6 @@ export function ChecklistGroup({
   };
 
   const scopeIds = resetScopeIds || items.map((item) => item.id);
-  const completedCount = scopeIds.filter((id) => Boolean(checkedMap[id])).length;
 
   const handleReset = () => {
     const nextMap = { ...checkedMap };
@@ -69,9 +68,6 @@ export function ChecklistGroup({
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           {title && <h4 className="text-h3 font-semibold text-main">{title}</h4>}
-          <span className="rounded-pill bg-primary-light px-3 py-0.5 text-caption font-semibold text-primary-hover">
-            체크 완료 {completedCount} / {scopeIds.length}
-          </span>
         </div>
         <button
           type="button"

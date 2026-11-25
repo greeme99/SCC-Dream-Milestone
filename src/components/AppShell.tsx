@@ -15,7 +15,7 @@ const TAB1_NAV: NavEntry[] = [
 ];
 
 const TAB2_NAV: NavEntry[] = [
-  { href: '/model/pre', label: '프리세션 (Welcome Call)' },
+  { href: '/model/pre', label: '사전 세션 (Welcome Call)' },
   { href: '/model/session-1', label: '1회기 · Discover Me' },
   { href: '/model/session-2', label: '2회기 · Explore Possibilities' },
   { href: '/model/session-3', label: '3회기 · Find the Gap' },
@@ -114,16 +114,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <line x1="4" y1="17" x2="20" y2="17" />
             </svg>
           </button>
-          <Link href="/overview" className="flex items-center gap-2.5 sm:gap-3">
+          <Link href="/overview" className="flex items-center gap-2 sm:gap-2.5">
             <img
               src="/samkodong-logo.png"
               alt="삼성코칭동호회 로고"
-              className="h-8 w-auto shrink-0 object-contain sm:h-9"
+              className="h-7 w-auto shrink-0 object-contain sm:h-8"
+            />
+            <img
+              src="/kca-logo.png"
+              alt="한국코치협회 로고"
+              className="h-6 w-auto shrink-0 object-contain sm:h-7"
             />
             <strong className="truncate text-sm font-bold text-main sm:text-lg">
-              <span className="hidden sm:inline">삼성코칭동호회 - </span>Dream Milestone
+              대학생-대학원생 Dream Milestone
             </strong>
-            <span className="sr-only">삼성코칭동호회 - Dream Milestone</span>
+            <span className="sr-only">대학생-대학원생 Dream Milestone</span>
           </Link>
         </div>
 
@@ -187,11 +192,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <div className="space-y-1.5">{TAB1_NAV.map(renderNavItem)}</div>
             </section>
 
-            {/* Group 2: 코칭모델 (프리세션~5회기) */}
+            {/* Group 2: 코칭모델 (사전 세션~5회기) */}
             <section className="rounded-lg border border-line-strong bg-surface p-3.5 shadow-card">
               <div className="mb-2.5 flex items-center gap-2 border-b border-line pb-2">
                 <strong className="text-caption font-bold tracking-tight text-main">
-                  코칭모델 (프리세션~5회기)
+                  코칭모델 (사전 세션~5회기)
                 </strong>
               </div>
               <div className="space-y-2">{TAB2_NAV.map(renderNavItem)}</div>

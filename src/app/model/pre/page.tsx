@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { AppShell } from '@/components/AppShell';
 import { ChecklistGroup } from '@/components/ChecklistGroup';
-import { COMMON_STAGE_FRAME, PRE_SESSION_DATA } from '@/data/coaching-sessions';
+import { PRE_SESSION_DATA } from '@/data/coaching-sessions';
 
 export default function PreSessionPage() {
   const [toastMsg, setToastMsg] = useState('');
@@ -22,35 +22,73 @@ export default function PreSessionPage() {
         <p className="mt-2 max-w-3xl text-body text-on-primary opacity-95">{PRE_SESSION_DATA.purpose}</p>
       </section>
 
-      {/* Common 5-Stage Frame Overview */}
+      {/* Pre-Session 15-Min Welcome Call Frame Overview */}
       <section className="mb-6 rounded-lg border border-line bg-surface p-6 shadow-card">
         <h2 className="text-h2 font-semibold text-main">
-          2.0 본 세션(1~5회기) 공통 5단계 인터랙티브 프레임 (60분 기준)
+          사전 세션(Welcome Call) 4단계 진행 개요 (15분 기준)
         </h2>
-        <p className="mt-1 text-caption text-body">
-          모든 본 세션은 아래 5단계 표준 구조를 기반으로 학생의 속도에 맞춰 유연하게 운영합니다.
-        </p>
-        <div className="mt-4 overflow-x-auto">
-          <table className="w-full border-collapse text-left text-body">
-            <thead>
-              <tr className="border-b border-line-strong bg-subtle">
-                <th className="px-4 py-3 text-caption font-bold text-main">단계</th>
-                <th className="px-4 py-3 text-caption font-bold text-main">권장 시간</th>
-                <th className="px-4 py-3 text-caption font-bold text-main">핵심 목적</th>
-                <th className="px-4 py-3 text-caption font-bold text-main">핵심 체크포인트</th>
-              </tr>
-            </thead>
-            <tbody>
-              {COMMON_STAGE_FRAME.map((row) => (
-                <tr key={row.step} className="border-b border-line hover:bg-subtle">
-                  <td className="px-4 py-3 font-semibold text-primary-hover">{row.step}</td>
-                  <td className="px-4 py-3 font-medium text-main">{row.time}</td>
-                  <td className="px-4 py-3 text-body">{row.purpose}</td>
-                  <td className="px-4 py-3 text-caption text-body">{row.check}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="mt-3 rounded-lg border border-primary/20 bg-primary-light p-4 text-body text-main">
+          <p className="font-semibold text-primary">
+            💡 핵심 방향: 사전 준비지(질문지)와 작성방법에 대해 이야기 나누면서 라포형성에 집중 합니다
+          </p>
+          <p className="mt-1 text-caption text-body">
+            1회기 본 세션에 앞서 학생과의 심리적 문턱을 낮추고 신뢰를 형성하는 시간입니다. 아래 4단계 타임라인 진행 가이드의 핵심 내용만 개요 수준으로 간결하게 진행합니다
+          </p>
+        </div>
+
+        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="flex flex-col rounded-md border border-line-strong bg-subtle p-4">
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-bold text-primary">1단계</span>
+              <span className="rounded-pill bg-primary-light px-2.5 py-0.5 text-xs font-semibold text-primary-hover">0~3분</span>
+            </div>
+            <strong className="mt-2 text-base font-semibold text-main">환영 및 라포 형성</strong>
+            <p className="mt-1 text-caption text-body">
+              따뜻하고 편안한 인사로 긴장 완화, 코치 자기소개 및 코칭 여정 참여 환영
+            </p>
+          </div>
+
+          <div className="flex flex-col rounded-md border border-line-strong bg-subtle p-4">
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-bold text-primary">2단계</span>
+              <span className="rounded-pill bg-primary-light px-2.5 py-0.5 text-xs font-semibold text-primary-hover">3~7분</span>
+            </div>
+            <strong className="mt-2 text-base font-semibold text-main">4대 원칙 & 비밀보장</strong>
+            <p className="mt-1 text-caption text-body">
+              진로 처방이 아닌 파트너십(Coaching First) 안내 및 모든 대화의 철저한 비밀보장 합의
+            </p>
+          </div>
+
+          <div className="flex flex-col rounded-md border border-line-strong bg-subtle p-4">
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-bold text-primary">3단계</span>
+              <span className="rounded-pill bg-primary-light px-2.5 py-0.5 text-xs font-semibold text-primary-hover">7~11분</span>
+            </div>
+            <strong className="mt-2 text-base font-semibold text-main">사전 준비지 & 기대 조율</strong>
+            <p className="mt-1 text-caption text-body">
+              사전 준비지 작성 내용을 함께 나누며 라포 형성, 5회기 완주 후 바라는 기대 확인
+            </p>
+          </div>
+
+          <div className="flex flex-col rounded-md border border-line-strong bg-subtle p-4">
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-bold text-primary">4단계</span>
+              <span className="rounded-pill bg-primary-light px-2.5 py-0.5 text-xs font-semibold text-primary-hover">11~15분</span>
+            </div>
+            <strong className="mt-2 text-base font-semibold text-main">1회기 준비 & 일정 확정</strong>
+            <p className="mt-1 text-caption text-body">
+              1회기 일시·접속 링크 확정, 부담 없는 생각 과제(기억에 남는 경험 3가지) 안내
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-4 rounded-md border border-line-strong bg-subtle p-3.5 text-body text-main">
+          <p className="flex items-center gap-2 text-caption font-medium text-body sm:text-body">
+            <span className="shrink-0 text-base" aria-hidden="true">📌</span>
+            <span className="font-medium text-main">
+              사전 세션 직후 학생에게 &quot;사전 준비지&quot;를 보내고, 본 세션 1회기 전에 작성해서 제출토록 합니다.
+            </span>
+          </p>
         </div>
       </section>
 
@@ -58,7 +96,7 @@ export default function PreSessionPage() {
       <section className="mb-6 rounded-lg border border-line bg-surface p-6 shadow-card">
         <h2 className="mb-4 text-h2 font-semibold text-main">1) 1회기 사전 준비 체크리스트</h2>
         <ChecklistGroup
-          title="프리세션 준비 점검"
+          title="사전 세션 준비 점검"
           items={PRE_SESSION_DATA.prepCheckpoints}
           onResetToast={showToast}
         />

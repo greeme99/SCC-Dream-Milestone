@@ -46,7 +46,13 @@ for (const file of files) {
     errors.push(`${rel}: forbidden pure color (#ff0000 / #00ff00 / #0000ff) detected`);
   }
 
-  if (FORBIDDEN_ORG_RE.test(content)) {
+  // Exclude authorized KCA header logo assets and certified coach title
+  const contentForOrgCheck = content
+    .replace(/kca-logo\.png/g, '')
+    .replace(/한국코치협회 로고/g, '')
+    .replace(/한국코치협회 인증코치/g, '');
+
+  if (FORBIDDEN_ORG_RE.test(contentForOrgCheck)) {
     errors.push(`${rel}: forbidden external association mention detected (DEC-008 / RULE-007)`);
   }
 

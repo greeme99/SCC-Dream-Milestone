@@ -29,10 +29,11 @@ test('TC-001 ~ TC-004: Auth cookie signing, constant-time password check, and op
 test('TC-005 & TC-006: AppShell 3-tab navigation, responsive drawer, and dual-theme toggle (scd.theme)', () => {
   const shellSrc = readSrc('src/components/AppShell.tsx');
   assert.ok(shellSrc.includes('프로그램 소개'), 'Tab 1 nav group exists');
-  assert.ok(shellSrc.includes('코칭모델 (프리세션~5회기)'), 'Tab 2 nav group exists');
+  assert.ok(shellSrc.includes('코칭모델 (사전 세션~5회기)'), 'Tab 2 nav group exists');
   assert.ok(shellSrc.includes('자료실'), 'Tab 3 nav group exists');
-  assert.ok(shellSrc.includes('삼성코칭동호회 - Dream Milestone'), 'Updated brand header exists');
+  assert.ok(shellSrc.includes('대학생-대학원생 Dream Milestone'), 'Updated brand header exists');
   assert.ok(shellSrc.includes('/samkodong-logo.png'), 'Club icon logo exists');
+  assert.ok(shellSrc.includes('/kca-logo.png'), 'KCA logo exists');
   assert.ok(shellSrc.includes('aria-current'), 'Active nav accessibility attribute exists');
 
   const themeSrc = readSrc('src/components/ThemeToggle.tsx');
@@ -46,7 +47,7 @@ test('TC-007: Tab 1 Overview includes 4 principles, SHARE protocol, 5-session ma
   assert.ok(overviewData.includes('Action & Reflection'));
   assert.ok(overviewData.includes('Guide, not Script'));
   assert.ok(overviewData.includes('Seek Permission'));
-  assert.ok(!/\bKCA\b|한국코치협회/.test(overviewData), 'No KCA mention in overview data');
+  assert.ok(overviewData.includes('한국코치협회 인증코치'), 'Authorized KCA certified coach spec exists');
 });
 
 test('TC-008 ~ TC-013: Tab 2 Pre-session, Sessions 1~5 5-stage tabs, checklists, Coaching Log (1~4), and Performance Eval (5)', () => {
@@ -70,7 +71,7 @@ test('TC-008 ~ TC-013: Tab 2 Pre-session, Sessions 1~5 5-stage tabs, checklists,
 test('TC-014 ~ TC-016: Tab 3 References 5 resources, optional coaching tools (GROW, STAR, BRAVE), and quality checklist', () => {
   const extLinks = readSrc('src/config/external-links.ts');
   assert.ok(extLinks.includes('Dream Milestone Full Guide.pdf'));
-  assert.ok(extLinks.includes('프리세션 사전 준비지'));
+  assert.ok(extLinks.includes('사전 세션 준비지'));
   assert.ok(extLinks.includes('학생용 My Dream Milestone Workbook'));
 
   const refToolkit = readSrc('src/data/references-toolkit.ts');
