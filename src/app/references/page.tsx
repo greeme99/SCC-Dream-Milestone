@@ -7,7 +7,6 @@ import { DRIVE_RESOURCES, DriveResourceItem } from '@/config/external-links';
 import {
   ACTION_EXPERIMENT_DESIGN_CARD,
   COACH_QUALITY_CHECKLIST,
-  OPTIONAL_TOOL_MAP,
   TOOL_FRAMEWORK_DETAILS
 } from '@/data/references-toolkit';
 
@@ -19,14 +18,14 @@ export default function ReferencesPage() {
     setTimeout(() => setToastMsg(''), 3200);
   };
 
-  const handleOpenResource = (res: DriveResourceItem) => {
-    if (!res.isConfigured || !res.url) {
-      showToast(
-        `'${res.title}' 구글 드라이브 공유 주소는 삼성코칭동호회(SCC) 운영진 연결 준비 중입니다.`
-      );
-      return;
-    }
-    window.open(res.url, '_blank', 'noopener,noreferrer');
+  const handleDownloadResource = (res: DriveResourceItem) => {
+    const link = document.createElement('a');
+    link.href = res.url;
+    link.download = res.downloadFileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast(`'${res.downloadFileName}' 다운로드를 시작합니다.`);
   };
 
   return (
@@ -42,7 +41,7 @@ export default function ReferencesPage() {
           참조자료 다운로드
         </h2>
         <p className="mt-1 text-caption text-body">
-          카드를 클릭하면 해당 리소스를 바로 열람·다운로드할 수 있습니다.
+          버튼을 클릭하면 원래 양식 규격에 맞춘 PDF 파일을 바로 다운로드할 수 있습니다.
         </p>
 
         <div className="mt-4 grid gap-4 md:grid-cols-2">
@@ -53,9 +52,6 @@ export default function ReferencesPage() {
             >
               <div>
                 <div className="flex items-center justify-between gap-2">
-                  <span className="rounded-pill bg-primary-light px-3 py-0.5 text-caption font-bold text-primary-hover">
-                    {res.format}
-                  </span>
                   <span className="text-xs font-semibold text-muted">{res.category}</span>
                 </div>
                 <h3 className="mt-2.5 text-h3 font-semibold text-main">
@@ -66,10 +62,10 @@ export default function ReferencesPage() {
               <div className="mt-4">
                 <button
                   type="button"
-                  onClick={() => handleOpenResource(res)}
+                  onClick={() => handleDownloadResource(res)}
                   className="btn-press inline-flex min-h-10 items-center gap-1.5 rounded-pill border border-primary bg-surface px-4 py-2 text-caption font-semibold text-primary transition hover:bg-primary-light"
                 >
-                  <span>열기 / 다운로드 ↗</span>
+                  <span>PDF 다운받기</span>
                 </button>
               </div>
             </article>

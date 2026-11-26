@@ -138,7 +138,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             className="btn-press hidden min-h-10 items-center gap-1.5 rounded-pill border border-primary bg-surface px-4 py-1.5 text-caption font-semibold text-primary transition hover:bg-primary-light md:inline-flex"
           >
             <span aria-hidden="true">📥</span>
-            <span>참조자료 다운로드</span>
+            <span>참조자료</span>
           </Link>
           <ThemeToggle />
           <button

@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dream Milestone 코칭 일지 · 설문 · 완료보고서 웹앱</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      --primary: #1B4965;
+      --primary-dark: #123347;
+      --accent: #B86B1B;
+    }
+    body {
+      font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      background-color: #F4F7F9;
+      color: #1E293B;
+    }
+    .tab-btn[aria-selected="true"] {
+      background-color: #1B4965;
+      color: #FFFFFF;
+      border-color: #1B4965;
+    }
+    .likert-option input:checked + span {
+      background-color: #1B4965;
+      color: #FFFFFF;
+      border-color: #1B4965;
+      font-weight: 600;
+    }
+    .radio-card input:checked + div {
+      background-color: #EBF2F7;
+      border-color: #1B4965;
+      color: #123347;
+      font-weight: 600;
+    }
+    @media print {
+      header, nav, .no-print { display: none !important; }
+      body { background: #FFFFFF !important; }
+      main { max-width: 100% !important; padding: 0 !important; }
+      .print-card { box-shadow: none !important; border: 1px solid #CBD5E1 !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-9 h-9 rounded-lg bg-[#1B4965] text-white flex items-center justify-center shrink-0">
+          <i data-lucide="milestone" class="w-5 h-5"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="text-xs font-bold tracking-wider text-[#B86B1B] uppercase">Dream Milestone · SCC</div>
+          <h1 class="text-base sm:text-lg font-bold text-[#123347] truncate">코칭 일지 · 종료 설문 · 완료 보고서</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="btn-toggle-history" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition">
+          <i data-lucide="history" class="w-4 h-4 text-[#1B4965]"></i>
+          <span>작성 기록</span>
+          <span id="history-count" class="px-1.5 py-0.5 text-xs rounded-full bg-[#EBF2F7] text-[#1B4965] font-bold">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Form Switcher Navigation -->
+    <nav class="max-w-5xl mx-auto px-4 sm:px-6 pb-3 overflow-x-auto">
+      <div class="flex items-center gap-2 min-w-max" role="tablist" aria-label="양식 선택">
+        <button type="button" role="tab" data-form="coaching_log" aria-selected="true" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition inline-flex items-center gap-1.5">
+          <i data-lucide="notebook-pen" class="w-4 h-4"></i>
+          <span>1. 회차별 코칭 일지</span>
+        </button>
+        <button type="button" role="tab" data-form="survey_mentee" aria-selected="false" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition inline-flex items-center gap-1.5">
+          <i data-lucide="user-check" class="w-4 h-4"></i>
+          <span>2. 종료 설문 (멘티/고객용)</span>
+        </button>
+        <button type="button" role="tab" data-form="survey_coach" aria-selected="false" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition inline-flex items-center gap-1.5">
+          <i data-lucide="award" class="w-4 h-4"></i>
+          <span>3. 종료 설문 (코치/멘토용)</span>
+        </button>
+        <button type="button" role="tab" data-form="completion_report" aria-selected="false" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition inline-flex items-center gap-1.5">
+          <i data-lucide="file-check-2" class="w-4 h-4"></i>
+          <span>4. 코칭 완료 보고서</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-6">
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 hidden items-center gap-2 px-4 py-3 rounded-xl bg-[#123347] text-white text-sm font-medium shadow-lg transition-all">
+      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+      <span id="toast-msg">처리되었습니다.</span>
+    </div>
+
+    <!-- Active Form Container -->
+    <div id="form-view">
+      <!-- Form Header Banner -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-5 print-card">
+        <div class="h-2.5 bg-gradient-to-r from-[#1B4965] to-[#B86B1B]"></div>
+        <div class="p-5 sm:p-6">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <span id="form-badge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#EBF2F7] text-[#1B4965]"></span>
+            <span class="text-xs text-slate-500"><span class="text-rose-600 font-bold">*</span> 필수 입력 항목</span>
+          </div>
+          <h2 id="form-title" class="text-xl sm:text-2xl font-bold text-[#123347] mb-2"></h2>
+          <p id="form-desc" class="text-sm text-slate-600 whitespace-pre-line leading-relaxed"></p>
+        </div>
+      </div>
+
+      <!-- Dynamic Form Body -->
+      <form id="dynamic-form" novalidate class="space-y-5">
+        <div id="form-sections" class="space-y-5"></div>
+
+        <!-- Action Bar -->
+        <div class="no-print bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-sm flex flex-wrap items-center justify-between gap-3">
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="btn-reset" type="button" class="px-3.5 py-2 text-sm font-medium rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 transition inline-flex items-center gap-1.5">
+              <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+              <span>초기화</span>
+            </button>
+            <button id="btn-save-draft" type="button" class="px-3.5 py-2 text-sm font-medium rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 transition inline-flex items-center gap-1.5">
+              <i data-lucide="save" class="w-4 h-4 text-[#1B4965]"></i>
+              <span>임시저장</span>
+            </button>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="btn-download-png-direct" type="button" class="px-5 py-2 text-sm font-semibold rounded-lg bg-[#1B4965] text-white hover:bg-[#123347] transition inline-flex items-center gap-1.5 shadow-sm">
+              <i data-lucide="image-down" class="w-4 h-4"></i>
+              <span>PNG 이미지 저장</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Submission Result View -->
+    <div id="result-view" class="hidden space-y-5">
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="h-2.5 bg-emerald-600"></div>
+        <div class="p-6">
+          <div class="flex items-start gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+              <i data-lucide="check-circle" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h2 id="result-title" class="text-lg sm:text-xl font-bold text-slate-900">제출이 완료되었습니다</h2>
+              <p id="result-message" class="text-sm text-slate-600 mt-1 leading-relaxed"></p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-2 pt-3 border-t border-slate-100">
+            <button id="btn-result-png" type="button" class="px-4 py-2 text-sm font-semibold rounded-lg bg-[#1B4965] text-white hover:bg-[#123347] transition inline-flex items-center gap-1.5">
+              <i data-lucide="image-down" class="w-4 h-4"></i>
+              <span>PNG 카드 다운로드</span>
+            </button>
+            <button id="btn-result-copy" type="button" class="px-4 py-2 text-sm font-semibold rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition inline-flex items-center gap-1.5">
+              <i data-lucide="copy" class="w-4 h-4"></i>
+              <span>내용 텍스트 복사</span>
+            </button>
+            <button id="btn-result-print" type="button" class="px-4 py-2 text-sm font-semibold rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition inline-flex items-center gap-1.5">
+              <i data-lucide="printer" class="w-4 h-4"></i>
+              <span>인쇄 / PDF 저장</span>
+            </button>
+            <button id="btn-back-to-form" type="button" class="px-4 py-2 text-sm font-medium rounded-lg text-[#1B4965] hover:bg-[#EBF2F7] transition inline-flex items-center gap-1.5 ml-auto">
+              <i data-lucide="arrow-left" class="w-4 h-4"></i>
+              <span>양식으로 돌아가기</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Preview Card -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 sm:p-6 print-card">
+        <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">작성 내용 요약</h3>
+        <div id="result-summary" class="space-y-3 text-sm"></div>
+      </div>
+    </div>
+
+    <!-- History View -->
+    <div id="history-view" class="hidden space-y-4">
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-bold text-[#123347]">작성 및 제출 기록</h2>
+          <p class="text-xs text-slate-500 mt-0.5">이 브라우저에 저장된 제출 내역입니다. PNG로 저장하거나 양식으로 다시 불러올 수 있습니다.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btn-export-json" type="button" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 inline-flex items-center gap-1.5">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>JSON 내보내기</span>
+          </button>
+          <button id="btn-close-history" type="button" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#1B4965] text-white hover:bg-[#123347]">
+            양식으로 돌아가기
+          </button>
+        </div>
+      </div>
+      <div id="history-list" class="space-y-3"></div>
+    </div>
+  </main>
+
+  <!-- In-page Reset Confirmation Modal -->
+  <div id="reset-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/50 p-4">
+    <div class="bg-white rounded-xl max-w-sm w-full p-5 shadow-xl border border-slate-200">
+      <h3 class="text-base font-bold text-slate-900 mb-1.5">입력 내용을 초기화할까요?</h3>
+      <p class="text-sm text-slate-600 mb-4">현재 작성 중인 모든 항목이 지워집니다.</p>
+      <div class="flex justify-end gap-2">
+        <button id="btn-cancel-reset" type="button" class="px-3.5 py-1.5 text-sm font-medium rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50">취소</button>
+        <button id="btn-confirm-reset" type="button" class="px-3.5 py-1.5 text-sm font-semibold rounded-lg bg-rose-600 text-white hover:bg-rose-700">초기화</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const LIKERT_AGREE = ["매우 그렇다", "그렇다", "보통이다", "그렇지 않다", "전혀 그렇지 않다"];
+    const LIKERT_SATISFY = ["매우 만족한다", "만족한다", "보통이다", "만족하지 않는다", "매우 만족하지 않는다"];
+
+    const FORMS = {
+      coaching_log: {
+        id: "coaching_log",
+        badge: "코치용 · 회차별 기록",
+        title: "코칭 프로그램 회차별 코칭 일지",
+        description: "코칭 프로그램의 고객(멘티)과 진행하신 소중한 코칭 세션을 기록해 주세요.\n작성해 주신 일지는 프로그램 진행 현황 파악 및 코칭 시간 인증을 위해서만 활용됩니다.\n(※ 코칭 윤리 규정에 따라, 고객의 민감한 개인정보나 구체적인 비밀 사항은 제외하고 코칭의 흐름과 주제 위주로 작성 부탁드립니다.)",
+        completionMsg: "오늘도 고객의 성장을 위해 정성껏 코칭을 진행해 주신 코치님께 진심으로 감사드립니다. - 운영팀 드림 -",
+        sections: [
+          {
+            title: "기본 정보",
+            fields: [
+              { id: "clientName", label: "고객이름", type: "text", required: true, placeholder: "고객 성함 또는 비식별 코드 입력" }
+            ]
+          },
+          {
+            title: "기본 정보 및 세션 개요",
+            fields: [
+              { id: "coachName", label: "코치(멘토) 성함", type: "text", required: true, placeholder: "코치 성함을 입력하세요" },
+              {
+                id: "sessionRound",
+                label: "진행하신 코칭 회차를 선택해 주세요.",
+                type: "radio",
+                required: true,
+                options: [
+                  "1회차 (사전 오리엔테이션 및 라포 형성 포함)",
+                  "2회차",
+                  "3회차",
+                  "4회차",
+                  "5회차 (최종 마무리 및 성과 리뷰)"
+                ]
+              },
+              {
+                id: "sessionDateTime",
+                label: "코칭 진행 일시 및 소요 시간",
+                type: "text",
+                required: true,
+                hint: "진행하신 날짜, 시작 시간, 총 소요 시간을 기록해 주세요. (예: 2026년 10월 01일 16:00~17:00 / 60분)",
+                placeholder: "예: 2026년 10월 01일 16:00~17:00 / 60분"
+              },
+              {
+                id: "sessionMethod",
+                label: "코칭 진행 방식",
+                type: "radio",
+                required: true,
+                options: [
+                  "대면 (오프라인 미팅)",
+                  "비대면 - 화상 (Zoom, Google Meet 등)",
+                  "비대면 - 전화 (음성 통화)"
+                ]
+              }
+            ]
+          },
+          {
+            title: "코칭 세션 주요 내용",
+            fields: [
+              {
+                id: "goalAndAction",
+                label: "오늘 세션의 핵심 코칭 주제(Goal) 및 실행과제",
+                type: "textarea",
+                required: true,
+                hint: "고객이 다룬 주요 이슈, 새롭게 발견한 통찰(Awareness), 협의한 실행과제를 간략히 기술해 주세요.",
+                placeholder: "주요 이슈, 발견한 통찰, 합의된 Action Experiment를 작성하세요."
+              }
+            ]
+          },
+          {
+            title: "코치 성찰 및 향후 일정",
+            fields: [
+              {
+                id: "nextSchedule",
+                label: "다음 코칭 예정 일시",
+                type: "text",
+                required: true,
+                hint: "다음 회차 일정을 조율하신 경우 날짜와 시간을 적어주세요. (예: 2026년 10월 10일 18시 / 미정인 경우 '일정 조율 중', 마지막 회차인 경우 '종료'로 기입)",
+                placeholder: "예: 2026년 10월 10일 18시 / 일정 조율 중 / 종료"
+              },
+              {
+                id: "opsRequest",
+                label: "운영팀에게 전달 및 요청 사항",
+                type: "textarea",
+                required: false,
+                hint: "일정 변경 이슈, 고객 특이사항, 포탈 시스템 및 운영 관련 건의사항 등이 있으신 경우에만 작성해 주세요.",
+                placeholder: "전달 및 요청 사항이 있을 경우에만 작성하세요 (선택)"
+              }
+            ]
+          }
+        ]
+      },
+
+      survey_mentee: {
+        id: "survey_mentee",
+        badge: "멘티/고객용 · 종료 설문",
+        title: "코칭 프로그램 종료 설문 (멘티/고객용)",
+        description: "코칭 프로그램에 끝까지 적극적으로 참여해주신 멘티(고객) 여러분께 진심으로 감사드립니다.\n코칭 종료에 따라, 여러분의 성장을 돌아보고 향후 더 나은 프로그램을 만들어가기 위해 소중한 의견을 듣고자 합니다.\n1 = 매우 그렇다(매우 만족) / 2 = 그렇다(만족) / 3 = 보통이다 / 4 = 그렇지 않다(불만족) / 5 = 전혀 그렇지 않다(매우 불만족)",
+        completionMsg: "끝까지 성실하게 응답해주셔서 감사합니다. 여러분의 성장을 늘 응원합니다! - 운영팀 드림 -",
+        sections: [
+          {
+            title: "기본 정보 및 동의",
+            fields: [
+              {
+                id: "consent",
+                label: "본 설문 결과의 프로그램 개선 및 통계 활용에 대한 동의 여부",
+                type: "radio",
+                required: true,
+                options: ["동의한다", "동의하지 않는다"]
+              },
+              {
+                id: "sessionSummary",
+                label: "참여하신 총 코칭 횟수 및 진행 방식을 적어주세요. (예: 총 5회 / 비대면 4회, 대면 1회)",
+                type: "text",
+                required: true,
+                placeholder: "예: 총 5회 / 비대면 4회, 대면 1회"
+              }
+            ]
+          },
+          {
+            title: "프로그램 운영 및 사전 준비 만족도",
+            fields: [
+              { id: "m_period", label: "배정된 코칭 횟수 및 전체 진행 기간은 목표를 달성하기에 적절하였다.", type: "likert", required: true, options: LIKERT_SATISFY },
+              { id: "m_ot", label: "코칭 시작 전 시행된 사전 오리엔테이션은 코칭을 이해하고 준비하는 데 도움이 되었다.", type: "likert", required: true, options: LIKERT_AGREE },
+              { id: "m_portal", label: "코칭 포탈의 가이드, 사전/사후 워크시트 및 참조자료는 코칭에 참여하는 데 도움이 되었다.", type: "likert", required: true, options: LIKERT_AGREE },
+              { id: "m_ops", label: "코칭 신청, 코치 매칭, 일정 조율, 문의 대응 등 프로그램에 대한 전반적인 운영에 만족한다.", type: "likert", required: true, options: LIKERT_AGREE }
+            ]
+          },
+          {
+            title: "코칭 과정 및 효과성 평가",
+            fields: [
+              { id: "m_rapport", label: "담당 코치(멘토)는 신뢰감 있는 분위기(라포, Rapport)를 형성하고 나의 이야기를 경청해 주었다.", type: "likert", required: true, options: LIKERT_AGREE },
+              { id: "m_action", label: "나는 이번 코칭(멘토링)을 통해 스스로의 이슈를 명확히 깨닫고 실질적인 실행 계획(Action Plan)을 수립할 수 있었다.", type: "likert", required: true, options: LIKERT_AGREE },
+              { id: "m_growth", label: "나는 이번 코칭 프로그램을 통해 당초 기대했던 목표를 달성하고 개인적/직무적으로 성장했음을 느낀다.", type: "likert", required: true, options: LIKERT_AGREE }
+            ]
+          },
+          {
+            title: "향후 의향 및 종합 의견",
+            fields: [
+              { id: "m_rejoin", label: "향후 유사한 코칭 프로그램이 개설된다면 재참여할 의향이 있다.", type: "likert", required: true, options: LIKERT_AGREE },
+              { id: "m_recommend", label: "주변 동료나 지인에게 본 코칭 프로그램을 추천할 의향이 있다.", type: "likert", required: true, options: LIKERT_AGREE },
+              {
+                id: "m_feedback",
+                label: "코칭 프로그램을 통해 가장 좋았던 점이나, 향후 개선되었으면 하는 부분(또는 담당 코치님께 전하고 싶은 감사 인사)을 자유롭게 말씀해주십시오.",
+                type: "textarea",
+                required: false,
+                placeholder: "자유롭게 의견을 작성해 주세요."
+              }
+            ]
+          }
+        ]
+      },
+
+      survey_coach: {
+        id: "survey_coach",
+        badge: "코치/멘토용 · 종료 설문",
+        title: "코칭 프로그램 종료 설문 (코치/멘토용)",
+        description: "코칭 프로그램에 진심을 다해 참여해주신 코치님들께 깊이 감사드립니다.\n코칭 종료에 따라, 이번 프로젝트의 성과를 돌아보고 향후 더 나은 코칭 프로그램을 만들어가기 위해 코치님들의 고견을 듣고자 합니다.\n1 = 매우 그렇다(매우 만족) / 2 = 그렇다(만족) / 3 = 보통이다 / 4 = 그렇지 않다(불만족) / 5 = 전혀 그렇지 않다(매우 불만족)",
+        completionMsg: "함께해주신 코치님 덕분에 의미 있는 프로그램이 되었습니다. 진심으로 감사드립니다. - 운영팀 드림 -",
+        sections: [
+          {
+            title: "기본 정보 및 동의",
+            fields: [
+              {
+                id: "consent",
+                label: "본 설문 결과의 프로그램 개선 및 통계 활용에 대한 동의 여부",
+                type: "radio",
+                required: true,
+                options: ["동의한다", "동의하지 않는다"]
+              },
+              {
+                id: "sessionSummary",
+                label: "진행하신 총 코칭 횟수 및 방식을 적어주세요. (예: 총 5회 / 비대면 4회, 대면 1회)",
+                type: "text",
+                required: true,
+                placeholder: "예: 총 5회 / 비대면 4회, 대면 1회"
+              }
+            ]
+          },
+          {
+            title: "프로그램 운영 및 사전 지원 만족도",
+            fields: [
+              { id: "c_period", label: "배정된 코칭 횟수 및 전체 진행 기간은 고객(멘티)의 코칭 목표를 달성하기에 적절하였다.", type: "likert", required: true, options: LIKERT_SATISFY },
+              { id: "c_ot", label: "코칭 대화 시작 전 시행된 사전 오리엔테이션은 프로그램을 이해하고 코칭을 진행하는 데 도움이 되었다.", type: "likert", required: true, options: LIKERT_AGREE },
+              { id: "c_portal", label: "코칭 포탈의 가이드, 코칭 도구 및 참조자료는 실제 코칭을 진행하는 데 적절하고 도움이 되었다.", type: "likert", required: true, options: LIKERT_AGREE },
+              { id: "c_ops", label: "코칭 신청서 배정, 코칭 일지 작성, 운영팀의 소통 및 대응 등 프로그램의 전반적인 운영에 만족한다.", type: "likert", required: true, options: LIKERT_AGREE }
+            ]
+          },
+          {
+            title: "코칭 과정 및 효과성 자가 평가",
+            fields: [
+              { id: "c_rapport", label: "나의 고객(멘티)은 코칭에 적극적으로 참여하였으며, 코치와 신뢰감 있는 관계(라포, Rapport)가 원활히 형성되었다.", type: "likert", required: true, options: LIKERT_AGREE },
+              { id: "c_menteeGrowth", label: "나의 고객(멘티)은 이번 멘토링(코칭)을 통해 스스로의 이슈를 명확히 깨닫고 실질적으로 성장했다고 생각한다.", type: "likert", required: true, options: LIKERT_AGREE },
+              { id: "c_coachGrowth", label: "나는 이번 코칭 프로그램에 참여하며 코치로서의 역량과 전문성이 한층 성장했음을 느낀다.", type: "likert", required: true, options: LIKERT_AGREE }
+            ]
+          },
+          {
+            title: "향후 의향 및 종합 의견",
+            fields: [
+              { id: "c_rejoin", label: "향후 유사한 코칭 프로그램이 개설된다면 코치로 재신청(재참여)할 의향이 있다.", type: "likert", required: true, options: LIKERT_AGREE },
+              { id: "c_recommend", label: "주변의 동료 코치들에게 본 코칭 프로그램 참여를 추천할 의향이 있다.", type: "likert", required: true, options: LIKERT_AGREE },
+              {
+                id: "c_feedback",
+                label: "코칭 프로그램 관련하여 좋았던 점이나 향후 개선되었으면 하는 부분(포탈 시스템, 운영 방식 등)에 대해 자유롭게 말씀해주십시오.",
+                type: "textarea",
+                required: false,
+                placeholder: "자유롭게 고견을 작성해 주세요."
+              }
+            ]
+          }
+        ]
+      },
+
+      completion_report: {
+        id: "completion_report",
+        badge: "코치용 · 최종 완료 보고서",
+        title: "코칭 프로그램 코칭 완료 보고서",
+        description: "코칭 프로그램의 전 과정을 성공적으로 마무리해 주신 코치님께 깊이 감사드립니다.\n본 보고서는 코칭 프로그램의 최종 완료를 확인하고, 고객(멘티)과 코치님의 의미 있는 변화와 성장을 기록하기 위해 작성됩니다.\n(※ 코칭 윤리 규정에 따라, 고객의 민감한 개인정보나 비밀유지(Confidentiality)가 필요한 세부 대화 내용은 제외하고 핵심 주제와 성장 변화 위주로 작성해 주시기 바랍니다.)",
+        completionMsg: "코칭 완료 보고서가 정상적으로 제출되었습니다. 처음부터 끝까지 고객의 성장을 위해 헌신해 주신 코치님의 노고에 진심으로 감사드립니다. - 운영팀 드림 -",
+        sections: [
+          {
+            title: "기본 정보 (포털 링크로 자동 입력)",
+            fields: [
+              { id: "programName", label: "코칭 프로그램", type: "text", required: false, hint: "코칭 프로그램 이름 — 포털에서 연 링크면 자동으로 채워져 있습니다.", placeholder: "예: Dream Milestone 커리어 코칭", defaultValue: "Dream Milestone 커리어 코칭" },
+              { id: "programId", label: "programId", type: "text", required: false, hint: "프로그램 ID — 포털에서 연 링크면 자동으로 채워져 있습니다. (예: 2026-2-SNU-CAREER)", placeholder: "예: 2026-2-SNU-CAREER" },
+              { id: "clientCode", label: "clientCode", type: "text", required: false, hint: "고객 코드 — 자동으로 채워져 있습니다. 고객 이름은 적지 않습니다.", placeholder: "예: DM-2026-01" }
+            ]
+          },
+          {
+            title: "섹션 1. 기본 정보 및 코칭 회기 집계",
+            fields: [
+              { id: "coachName", label: "코치(멘토) 성함", type: "text", required: true, placeholder: "코치 성함을 입력하세요" },
+              { id: "coachingPeriod", label: "전체 코칭 진행 기간", type: "text", required: true, hint: "첫 회기 시작일부터 마지막 회기 종료일까지의 기간을 입력해 주세요. (예: 2026. 05. 10. ~ 2026. 08. 30.)", placeholder: "예: 2026. 05. 10. ~ 2026. 08. 30." },
+              { id: "onlineCount", label: "[비대면] 코칭 진행 횟수 (전화, 화상 등)", type: "radio_inline", required: true, hint: "비대면으로 진행한 회기 수를 선택해 주세요. (해당 없을 시 '0회' 선택)", options: ["0회", "1회", "2회", "3회", "4회", "5회"] },
+              { id: "offlineCount", label: "[대면] 코칭 진행 횟수", type: "radio_inline", required: true, hint: "오프라인 대면으로 진행한 회기 수를 선택해 주세요. (해당 없을 시 '0회' 선택)", options: ["0회", "1회", "2회", "3회", "4회", "5회"] },
+              { id: "totalSummary", label: "[합계] 총 코칭 진행 회기 및 총 소요 시간", type: "text", required: true, hint: "비대면과 대면을 합산한 총 회기 수와 총 코칭 시간을 적어주세요. (예: 총 5회기 / 총 5시간)", placeholder: "예: 총 5회기 / 총 5시간" }
+            ]
+          },
+          {
+            title: "섹션 2. 코칭 종합 내용 및 성과",
+            fields: [
+              {
+                id: "mainContent",
+                label: "코칭 주요 내용 (코칭 목표, 주요 과정, 성공 기여 요인 등)",
+                type: "textarea",
+                required: true,
+                hint: "고객과 합의했던 전체 코칭 목표(Goal), 회기별 주요 진행 흐름, 그리고 목표 달성에 긍정적인 영향을 미친 핵심 기여 요인(라포 형성, 사용된 코칭 도구 등)을 종합적으로 서술해 주세요.",
+                placeholder: "코칭 목표, 주요 과정, 활용 도구 및 기여 요인을 작성하세요."
+              },
+              {
+                id: "menteeGrowth",
+                label: "고객(피코치/멘티)의 변화와 성장",
+                type: "textarea",
+                required: true,
+                hint: "코칭 시작 전과 비교하여 고객에게 나타난 관점 및 인식의 전환(Awareness), 태도 및 행동의 변화, 실질적인 목표 달성 성과 등을 구체적으로 작성해 주세요.",
+                placeholder: "고객의 인식 전환, 행동 변화, 목표 달성 성과를 작성하세요."
+              },
+              {
+                id: "coachGrowth",
+                label: "코치(멘토)의 변화와 성장",
+                type: "textarea",
+                required: true,
+                hint: "이번 코칭 여정을 함께하며 코치님 스스로 느낀 보람, 새롭게 얻은 코칭적 통찰, 코칭 역량(경청, 질문, 프레즌스 등) 측면에서의 성장을 자유롭게 나누어 주세요.",
+                placeholder: "코치로서 느낀 보람, 통찰 및 역량 성장을 작성하세요."
+              }
+            ]
+          },
+          {
+            title: "섹션 3. 향후 계획 및 최종 제출 확인",
+            fields: [
+              {
+                id: "futurePlan",
+                label: "코칭 종결 후 계획 및 제언",
+                type: "textarea",
+                required: false,
+                hint: "코칭 종료 후 고객이 스스로 성장을 이어가기 위해 수립한 사후 실행 계획(Follow-up Plan)이나, 향후 코칭 프로그램의 발전을 위한 코치님의 제언을 적어주세요.",
+                placeholder: "사후 실행 계획 및 프로그램 발전 제언을 작성하세요."
+              },
+              { id: "submitDate", label: "보고서 제출일자", type: "date", required: true },
+              { id: "signature", label: "작성자 확인 및 전자 서명", type: "text", required: true, hint: "위와 같이 코칭 프로그램의 코칭 완료 보고서를 제출하며, 작성된 내용이 사실과 같음을 확인합니다. 아래에 코치님의 성함을 다시 한번 기입하여 서명을 갈음합니다. (예: 홍길동 (서명))", placeholder: "예: 홍길동 (서명)" }
+            ]
+          }
+        ]
+      }
+    };
+
+    const STORAGE_DRAFT_PREFIX = "dm_form_draft_v1_";
+    const STORAGE_HISTORY_KEY = "dm_form_history_v1";
+
+    let activeFormId = "coaching_log";
+    let lastSubmittedRecord = null;
+
+    function safeGetStorage(key) {
+      try { return localStorage.getItem(key); } catch (e) { return null; }
+    }
+    function safeSetStorage(key, val) {
+      try { localStorage.setItem(key, val); } catch (e) {}
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      document.getElementById("toast-msg").textContent = msg;
+      toast.classList.remove("hidden");
+      toast.classList.add("flex");
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => {
+        toast.classList.add("hidden");
+        toast.classList.remove("flex");
+      }, 2600);
+    }
+
+    function getHistory() {
+      try {
+        const raw = safeGetStorage(STORAGE_HISTORY_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function updateHistoryCount() {
+      document.getElementById("history-count").textContent = String(getHistory().length);
+    }
+
+    function getUrlPrefill() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        form: params.get("form"),
+        programName: params.get("program") || params.get("programName"),
+        programId: params.get("programId"),
+        clientCode: params.get("clientCode")
+      };
+    }
+
+    function getDraft(formId) {
+      try {
+        const raw = safeGetStorage(STORAGE_DRAFT_PREFIX + formId);
+        return raw ? JSON.parse(raw) : {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function renderForm(formId) {
+      activeFormId = formId;
+      const spec = FORMS[formId];
+      const draft = getDraft(formId);
+      const prefill = getUrlPrefill();
+
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.setAttribute("aria-selected", btn.dataset.form === formId ? "true" : "false");
+      });
+
+      document.getElementById("form-badge").textContent = spec.badge;
+      document.getElementById("form-title").textContent = spec.title;
+      document.getElementById("form-desc").textContent = spec.description;
+
+      const container = document.getElementById("form-sections");
+      container.innerHTML = "";
+
+      spec.sections.forEach(sec => {
+        const card = document.createElement("div");
+        card.className = "bg-white rounded-xl border border-slate-200 shadow-sm p-5 sm:p-6 print-card";
+        let html = `<h3 class="text-base font-bold text-[#1B4965] pb-2.5 mb-4 border-b border-slate-100">${escapeHtml(sec.title)}</h3><div class="space-y-5">`;
+
+        sec.fields.forEach(field => {
+          let val = draft[field.id];
+          if (val === undefined) {
+            if (prefill[field.id]) val = prefill[field.id];
+            else if (field.defaultValue) val = field.defaultValue;
+            else if (field.type === "date") val = new Date().toISOString().slice(0, 10);
+            else val = "";
+          }
+
+          html += `<div class="field-group" data-field-id="${field.id}">`;
+          html += `<label class="block text-sm font-semibold text-slate-800 mb-1">${escapeHtml(field.label)}${field.required ? ' <span class="text-rose-600">*</span>' : ''}</label>`;
+          if (field.hint) {
+            html += `<p class="text-xs text-slate-500 mb-2 leading-relaxed">${escapeHtml(field.hint)}</p>`;
+          }
+
+          if (field.type === "text" || field.type === "date") {
+            html += `<input type="${field.type}" name="${field.id}" value="${escapeHtml(val)}" placeholder="${escapeHtml(field.placeholder || "")}" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#1B4965]/30 focus:border-[#1B4965] bg-white">`;
+          } else if (field.type === "textarea") {
+            html += `<textarea name="${field.id}" rows="4" placeholder="${escapeHtml(field.placeholder || "")}" class="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#1B4965]/30 focus:border-[#1B4965] bg-white leading-relaxed">${escapeHtml(val)}</textarea>`;
+          } else if (field.type === "radio") {
+            html += `<div class="space-y-2 mt-1.5">`;
+            field.options.forEach(opt => {
+              const checked = val === opt ? "checked" : "";
+              html += `
+                <label class="radio-card block cursor-pointer">
+                  <input type="radio" name="${field.id}" value="${escapeHtml(opt)}" ${checked} class="sr-only">
+                  <div class="px-3.5 py-2.5 rounded-lg border border-slate-200 text-sm text-slate-700 hover:bg-slate-50 transition flex items-center gap-2.5">
+                    <span class="w-4 h-4 rounded-full border border-slate-400 flex items-center justify-center shrink-0"></span>
+                    <span>${escapeHtml(opt)}</span>
+                  </div>
+                </label>`;
+            });
+            html += `</div>`;
+          } else if (field.type === "radio_inline") {
+            html += `<div class="flex flex-wrap gap-2 mt-1.5">`;
+            field.options.forEach(opt => {
+              const checked = val === opt ? "checked" : "";
+              html += `
+                <label class="likert-option cursor-pointer">
+                  <input type="radio" name="${field.id}" value="${escapeHtml(opt)}" ${checked} class="sr-only">
+                  <span class="inline-block px-3.5 py-2 rounded-lg border border-slate-200 text-xs sm:text-sm text-slate-700 hover:bg-slate-50 transition">${escapeHtml(opt)}</span>
+                </label>`;
+            });
+            html += `</div>`;
+          } else if (field.type === "likert") {
+            html += `<div class="grid grid-cols-2 sm:grid-cols-5 gap-2 mt-2">`;
+            field.options.forEach((opt, idx) => {
+              const checked = val === opt ? "checked" : "";
+              html += `
+                <label class="likert-option cursor-pointer text-center">
+                  <input type="radio" name="${field.id}" value="${escapeHtml(opt)}" ${checked} class="sr-only">
+                  <span class="block px-2 py-2.5 rounded-lg border border-slate-200 text-xs text-slate-700 hover:bg-slate-50 transition h-full flex flex-col items-center justify-center">
+                    <b class="text-[11px] opacity-75 mb-0.5">${idx + 1}점</b>
+                    <span>${escapeHtml(opt)}</span>
+                  </span>
+                </label>`;
+            });
+            html += `</div>`;
+          }
+
+          html += `<p class="field-error hidden text-xs text-rose-600 font-medium mt-1.5">필수 항목을 입력(선택)해 주세요.</p>`;
+          html += `</div>`;
+        });
+
+        html += `</div>`;
+        card.innerHTML = html;
+        container.appendChild(card);
+      });
+
+      document.getElementById("form-view").classList.remove("hidden");
+      document.getElementById("result-view").classList.add("hidden");
+      document.getElementById("history-view").classList.add("hidden");
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function collectFormData() {
+      const spec = FORMS[activeFormId];
+      const formEl = document.getElementById("dynamic-form");
+      const data = {};
+      let valid = true;
+      let firstInvalidEl = null;
+
+      spec.sections.forEach(sec => {
+        sec.fields.forEach(field => {
+          const group = formEl.querySelector(`.field-group[data-field-id="${field.id}"]`);
+          const errEl = group.querySelector(".field-error");
+          let value = "";
+          if (field.type === "radio" || field.type === "radio_inline" || field.type === "likert") {
+            const checked = formEl.querySelector(`input[name="${field.id}"]:checked`);
+            value = checked ? checked.value : "";
+          } else {
+            const input = formEl.querySelector(`[name="${field.id}"]`);
+            value = input ? input.value.trim() : "";
+          }
+          data[field.id] = value;
+
+          if (field.required && !value) {
+            valid = false;
+            errEl.classList.remove("hidden");
+            if (!firstInvalidEl) firstInvalidEl = group;
+          } else {
+            errEl.classList.add("hidden");
+          }
+        });
+      });
+
+      return { valid, data, firstInvalidEl };
+    }
+
+    function saveDraftCurrent() {
+      const { data } = collectFormData();
+      safeSetStorage(STORAGE_DRAFT_PREFIX + activeFormId, JSON.stringify(data));
+      showToast("현재 작성 내용이 임시저장되었습니다.");
+    }
+
+    function buildRecord(data) {
+      const spec = FORMS[activeFormId];
+      const items = [];
+      spec.sections.forEach(sec => {
+        sec.fields.forEach(f => {
+          items.push({ label: f.label, value: data[f.id] || "(미입력)" });
+        });
+      });
+      return {
+        uid: "rec_" + Date.now(),
+        formId: activeFormId,
+        formTitle: spec.title,
+        completionMsg: spec.completionMsg,
+        createdAt: new Date().toLocaleString("ko-KR"),
+        data,
+        items
+      };
+    }
+
+    function showResultView(record) {
+      lastSubmittedRecord = record;
+      document.getElementById("result-title").textContent = `${record.formTitle} — 제출 완료`;
+      document.getElementById("result-message").textContent = record.completionMsg;
+
+      const summaryEl = document.getElementById("result-summary");
+      summaryEl.innerHTML = record.items.map(it => `
+        <div class="border-b border-slate-100 pb-2.5 last:border-b-0">
+          <div class="text-xs font-semibold text-slate-500 mb-0.5">${escapeHtml(it.label)}</div>
+          <div class="text-sm text-slate-900 whitespace-pre-line">${escapeHtml(it.value)}</div>
+        </div>
+      `).join("");
+
+      document.getElementById("form-view").classList.add("hidden");
+      document.getElementById("history-view").classList.add("hidden");
+      document.getElementById("result-view").classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function wrapCanvasLines(ctx, text, maxWidth) {
+      const paragraphs = String(text || "").split("\n");
+      const lines = [];
+      paragraphs.forEach(p => {
+        if (!p) { lines.push(""); return; }
+        let line = "";
+        for (let i = 0; i < p.length; i++) {
+          const test = line + p[i];
+          if (ctx.measureText(test).width > maxWidth && line.length > 0) {
+            lines.push(line);
+            line = p[i];
+          } else {
+            line = test;
+          }
+        }
+        if (line) lines.push(line);
+      });
+      return lines;
+    }
+
+    function downloadRecordAsPng(record) {
+      const width = 900;
+      const padX = 48;
+      const contentW = width - padX * 2;
+      const tempCanvas = document.createElement("canvas");
+      const tctx = tempCanvas.getContext("2d");
+
+      // Measure height
+      let y = 140;
+      record.items.forEach(it => {
+        tctx.font = "600 15px 'Noto Sans KR', 'Malgun Gothic', sans-serif";
+        const lLines = wrapCanvasLines(tctx, it.label, contentW - 24);
+        tctx.font = "400 17px 'Noto Sans KR', 'Malgun Gothic', sans-serif";
+        const vLines = wrapCanvasLines(tctx, it.value, contentW - 24);
+        y += lLines.length * 22 + vLines.length * 26 + 34;
+      });
+      const height = Math.max(460, y + 60);
+
+      const scale = 2;
+      const canvas = document.createElement("canvas");
+      canvas.width = width * scale;
+      canvas.height = height * scale;
+      const ctx = canvas.getContext("2d");
+      ctx.scale(scale, scale);
+
+      // Background
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, width, height);
+
+      // Header Banner
+      ctx.fillStyle = "#1B4965";
+      ctx.fillRect(0, 0, width, 108);
+      ctx.fillStyle = "#B86B1B";
+      ctx.fillRect(0, 104, width, 5);
+
+      ctx.fillStyle = "#FDE68A";
+      ctx.font = "700 13px 'Noto Sans KR', 'Malgun Gothic', sans-serif";
+      ctx.fillText("DREAM MILESTONE · SCC COACHING PORTAL", padX, 36);
+
+      ctx.fillStyle = "#FFFFFF";
+      ctx.font = "700 23px 'Noto Sans KR', 'Malgun Gothic', sans-serif";
+      ctx.fillText(record.formTitle, padX, 70);
+
+      ctx.fillStyle = "#CBD5E1";
+      ctx.font = "400 13px 'Noto Sans KR', 'Malgun Gothic', sans-serif";
+      ctx.fillText(`작성 일시: ${record.createdAt}`, padX, 92);
+
+      // Items
+      let curY = 136;
+      record.items.forEach((it, idx) => {
+        ctx.font = "600 15px 'Noto Sans KR', 'Malgun Gothic', sans-serif";
+        const lLines = wrapCanvasLines(ctx, it.label, contentW - 24);
+        ctx.font = "400 17px 'Noto Sans KR', 'Malgun Gothic', sans-serif";
+        const vLines = wrapCanvasLines(ctx, it.value, contentW - 24);
+        const boxH = lLines.length * 22 + vLines.length * 26 + 22;
+
+        ctx.fillStyle = idx % 2 === 0 ? "#F8FAFC" : "#FFFFFF";
+        ctx.fillRect(padX, curY, contentW, boxH);
+        ctx.strokeStyle = "#E2E8F0";
+        ctx.strokeRect(padX, curY, contentW, boxH);
+
+        let ty = curY + 24;
+        ctx.fillStyle = "#1B4965";
+        ctx.font = "700 14px 'Noto Sans KR', 'Malgun Gothic', sans-serif";
+        lLines.forEach(line => {
+          ctx.fillText(line, padX + 14, ty);
+          ty += 22;
+        });
+
+        ty += 4;
+        ctx.fillStyle = "#1E293B";
+        ctx.font = "400 16px 'Noto Sans KR', 'Malgun Gothic', sans-serif";
+        vLines.forEach(line => {
+          ctx.fillText(line, padX + 14, ty);
+          ty += 26;
+        });
+
+        curY += boxH + 10;
+      });
+
+      // Footer
+      ctx.fillStyle = "#64748B";
+      ctx.font = "400 12px 'Noto Sans KR', 'Malgun Gothic', sans-serif";
+      ctx.fillText("한국코치협회 인증코치 · Dream Milestone 5회기 커리어 코칭 프로그램", padX, height - 22);
+
+      const link = document.createElement("a");
+      link.download = `${record.formId}_${Date.now()}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+      showToast("PNG 카드 이미지가 저장되었습니다.");
+    }
+
+    function copyRecordText(record) {
+      const lines = [`[${record.formTitle}] (${record.createdAt})`, ""];
+      record.items.forEach(it => {
+        lines.push(`■ ${it.label}`);
+        lines.push(it.value);
+        lines.push("");
+      });
+      const text = lines.join("\n");
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showToast("작성 내용이 클립보드에 복사되었습니다."))
+          .catch(() => fallbackCopy(text));
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+        showToast("작성 내용이 클립보드에 복사되었습니다.");
+      } catch (e) {
+        showToast("복사에 실패했습니다.");
+      }
+      document.body.removeChild(ta);
+    }
+
+    function renderHistoryView() {
+      const list = getHistory();
+      const container = document.getElementById("history-list");
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white rounded-xl border border-slate-200 p-8 text-center text-sm text-slate-500">
+            아직 저장된 제출 기록이 없습니다. 양식을 작성하고 제출해 보세요.
+          </div>`;
+      } else {
+        container.innerHTML = list.map((rec, idx) => `
+          <div class="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-sm flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <div class="text-xs text-slate-500">${escapeHtml(rec.createdAt)}</div>
+              <div class="text-sm sm:text-base font-bold text-[#123347] mt-0.5">${escapeHtml(rec.formTitle)}</div>
+              <div class="text-xs text-slate-600 mt-1">${escapeHtml(rec.items.slice(0, 2).map(i => i.value).join(" · "))}</div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button type="button" data-action="png" data-idx="${idx}" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#EBF2F7] text-[#1B4965] hover:bg-[#dce8f0]">PNG 저장</button>
+              <button type="button" data-action="view" data-idx="${idx}" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50">상세 보기</button>
+              <button type="button" data-action="delete" data-idx="${idx}" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-rose-200 text-rose-600 hover:bg-rose-50">삭제</button>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      document.getElementById("form-view").classList.add("hidden");
+      document.getElementById("result-view").classList.add("hidden");
+      document.getElementById("history-view").classList.remove("hidden");
+    }
+
+    // Event Listeners
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => renderForm(btn.dataset.form));
+    });
+
+    document.getElementById("dynamic-form").addEventListener("submit", e => {
+      e.preventDefault();
+      const { valid, data, firstInvalidEl } = collectFormData();
+      if (!valid) {
+        firstInvalidEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        showToast("필수 입력 항목을 확인해 주세요.");
+        return;
+      }
+      safeSetStorage(STORAGE_DRAFT_PREFIX + activeFormId, JSON.stringify(data));
+      const record = buildRecord(data);
+      const history = getHistory();
+      history.unshift(record);
+      safeSetStorage(STORAGE_HISTORY_KEY, JSON.stringify(history));
+      updateHistoryCount();
+      showResultView(record);
+    });
+
+    document.getElementById("btn-save-draft").addEventListener("click", saveDraftCurrent);
+
+    document.getElementById("btn-download-png-direct").addEventListener("click", () => {
+      const { data } = collectFormData();
+      const record = buildRecord(data);
+      downloadRecordAsPng(record);
+    });
+
+    document.getElementById("btn-reset").addEventListener("click", () => {
+      document.getElementById("reset-modal").classList.remove("hidden");
+      document.getElementById("reset-modal").classList.add("flex");
+    });
+
+    document.getElementById("btn-cancel-reset").addEventListener("click", () => {
+      document.getElementById("reset-modal").classList.add("hidden");
+      document.getElementById("reset-modal").classList.remove("flex");
+    });
+
+    document.getElementById("btn-confirm-reset").addEventListener("click", () => {
+      safeSetStorage(STORAGE_DRAFT_PREFIX + activeFormId, "");
+      document.getElementById("reset-modal").classList.add("hidden");
+      document.getElementById("reset-modal").classList.remove("flex");
+      renderForm(activeFormId);
+      showToast("양식이 초기화되었습니다.");
+    });
+
+    document.getElementById("btn-result-png").addEventListener("click", () => {
+      if (lastSubmittedRecord) downloadRecordAsPng(lastSubmittedRecord);
+    });
+    document.getElementById("btn-result-copy").addEventListener("click", () => {
+      if (lastSubmittedRecord) copyRecordText(lastSubmittedRecord);
+    });
+    document.getElementById("btn-result-print").addEventListener("click", () => window.print());
+    document.getElementById("btn-back-to-form").addEventListener("click", () => renderForm(activeFormId));
+
+    document.getElementById("btn-toggle-history").addEventListener("click", renderHistoryView);
+    document.getElementById("btn-close-history").addEventListener("click", () => renderForm(activeFormId));
+
+    document.getElementById("history-list").addEventListener("click", e => {
+      const btn = e.target.closest("button[data-action]");
+      if (!btn) return;
+      const idx = Number(btn.dataset.idx);
+      const history = getHistory();
+      const rec = history[idx];
+      if (!rec) return;
+      if (btn.dataset.action === "png") downloadRecordAsPng(rec);
+      else if (btn.dataset.action === "view") showResultView(rec);
+      else if (btn.dataset.action === "delete") {
+        history.splice(idx, 1);
+        safeSetStorage(STORAGE_HISTORY_KEY, JSON.stringify(history));
+        updateHistoryCount();
+        renderHistoryView();
+        showToast("기록이 삭제되었습니다.");
+      }
+    });
+
+    document.getElementById("btn-export-json").addEventListener("click", () => {
+      const dataStr = JSON.stringify(getHistory(), null, 2);
+      const blob = new Blob([dataStr], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `dream_milestone_records_${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast("JSON 파일로 내보냈습니다.");
+    });
+
+    // Init
+    (function init() {
+      const prefill = getUrlPrefill();
+      const initialForm = (prefill.form && FORMS[prefill.form]) ? prefill.form : "coaching_log";
+      updateHistoryCount();
+      renderForm(initialForm);
+    })();
+  </script>
+</body>
+</html>

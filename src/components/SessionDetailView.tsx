@@ -5,10 +5,6 @@ import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ChecklistGroup } from '@/components/ChecklistGroup';
 import {
-  EXTERNAL_LINKS,
-  getCoachingLogFormUrl
-} from '@/config/external-links';
-import {
   CoachingSessionData,
   PERFORMANCE_EVALUATION_SPEC,
   StageKey
@@ -83,46 +79,65 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
       : null;
 
   const handleOpenCoachingLog = () => {
-    const { url, isConfigured } = getCoachingLogFormUrl(session.sessionNumber);
-    if (!isConfigured || !url) {
-      showToast(
-        `${session.sessionNumber}회기 코칭일지 구글폼 URL은 삼성코칭동호회(SCC) 운영진 연결 준비 중입니다. 하단 기록 항목 미리보기를 참조하세요.`
-      );
-      return;
-    }
-    window.open(url, '_blank', 'noopener,noreferrer');
+    window.open(
+      `/forms.html?form=coaching_log&round=${session.sessionNumber}`,
+      '_blank',
+      'noopener,noreferrer'
+    );
   };
 
   const handleOpenCoachEval = () => {
-    if (!EXTERNAL_LINKS.coachEvalForm.isConfigured || !EXTERNAL_LINKS.coachEvalForm.url) {
-      showToast(
-        '코치 성과평가 구글폼 URL은 삼성코칭동호회(SCC) 운영진 연결 준비 중입니다. 하단 평가 문항 표를 참조하세요.'
-      );
-      return;
-    }
-    window.open(EXTERNAL_LINKS.coachEvalForm.url, '_blank', 'noopener,noreferrer');
+    window.open('/forms.html?form=survey_coach', '_blank', 'noopener,noreferrer');
   };
 
   const handleOpenStudentEval = () => {
-    if (!EXTERNAL_LINKS.studentEvalForm.isConfigured || !EXTERNAL_LINKS.studentEvalForm.url) {
-      showToast(
-        '학생 성과평가 구글폼 URL은 삼성코칭동호회(SCC) 운영진 연결 준비 중입니다. 하단 평가 문항 표를 참조하세요.'
-      );
-      return;
-    }
-    window.open(EXTERNAL_LINKS.studentEvalForm.url, '_blank', 'noopener,noreferrer');
+    window.open('/forms.html?form=survey_mentee', '_blank', 'noopener,noreferrer');
   };
 
-  const handleCopyStudentEvalLink = async () => {
-    const linkToCopy =
-      EXTERNAL_LINKS.studentEvalForm.url || EXTERNAL_LINKS.studentEvalForm.fallbackDemoUrl;
+  const handleDownloadStudentEvalHtml = async () => {
     try {
-      await navigator.clipboard.writeText(linkToCopy);
+      const res = await fetch('/forms.html');
+      if (!res.ok) throw new Error('Failed to fetch forms.html');
+      const rawHtml = await res.text();
+      const studentHtml = rawHtml
+        .replace(
+          '<title>Dream Milestone 코칭 일지 · 설문 · 완료보고서 웹앱</title>',
+          '<title>Dream Milestone 종료 설문 (멘티/고객용)</title>'
+        )
+        .replace(
+          '>코칭 일지 · 종료 설문 · 완료 보고서</h1>',
+          '>종료 설문 (멘티/고객용)</h1>'
+        )
+        .replace(
+          /<!-- Form Switcher Navigation -->[\s\S]*?<\/nav>/,
+          `<!-- Form Switcher Navigation -->
+    <nav class="nav-wrap">
+      <div class="nav-list" role="tablist" aria-label="양식 선택">
+        <button type="button" role="tab" data-form="survey_mentee" aria-selected="true" class="tab-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>
+          <span>종료 설문 (멘티/고객용)</span>
+        </button>
+      </div>
+    </nav>`
+        )
+        .replace(
+          'const initialForm = (prefill.form && FORMS[prefill.form]) ? prefill.form : "coaching_log";',
+          'const initialForm = "survey_mentee";'
+        );
+      const blob = new Blob([studentHtml], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = '학생_성과평가_설문.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
       setCopied(true);
-      showToast('학생 성과평가 링크가 클립보드에 복사되었습니다.');
+      showToast('학생 성과평가 HTML 파일이 다운로드되었습니다.');
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      showToast(`학생 성과평가 링크: ${linkToCopy}`);
+      showToast('HTML 파일 다운로드에 실패했습니다. 다시 시도해 주세요.');
     }
   };
 
@@ -207,14 +222,13 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
               ⚡ Between Session 과제 ↓
             </a>
           )}
-          {session.sessionNumber <= 4 ? (
-            <a
-              href="#coaching-log-section"
-              className="rounded-pill bg-primary-light px-3 py-1 text-primary-hover transition hover:opacity-80"
-            >
-              📝 코칭일지 작성 ↓
-            </a>
-          ) : (
+          <a
+            href="#coaching-log-section"
+            className="rounded-pill bg-primary-light px-3 py-1 text-primary-hover transition hover:opacity-80"
+          >
+            📝 코칭일지 작성 ↓
+          </a>
+          {session.sessionNumber === 5 && (
             <a
               href="#performance-eval-section"
               className="rounded-pill bg-primary-light px-3 py-1 text-primary-hover transition hover:opacity-80"
@@ -311,10 +325,7 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
               </button>
             ) : (
               <div className="inline-flex items-center gap-2 rounded-md border border-line-strong bg-subtle px-4 py-2.5 text-caption font-semibold text-muted">
-                <span>🏁 5단계 마무리 완료</span>
-                <span className="max-sm:hidden">
-                  ({session.sessionNumber <= 4 ? '아래 Between Session 및 일지 작성으로 이어집니다' : '아래 최종 성과평가로 이어집니다'} ↓)
-                </span>
+                <span>🏁 5단계 마무리 완료 (↓)</span>
               </div>
             )}
           </div>
@@ -362,9 +373,9 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
       )}
 
       {/* =================================================================== */}
-      {/* STAGE 5 ONLY: SESSIONS 1~4 COACHING LOG GOOGLE FORM                */}
+      {/* STAGE 5 ONLY: SESSIONS 1~5 COACHING LOG GOOGLE FORM                */}
       {/* =================================================================== */}
-      {activeStage === 'close' && session.sessionNumber <= 4 && (
+      {activeStage === 'close' && (
         <section
           id="coaching-log-section"
           className="mb-6 rounded-lg border-2 border-primary bg-surface p-6 shadow-card"
@@ -465,10 +476,10 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
                 </button>
                 <button
                   type="button"
-                  onClick={handleCopyStudentEvalLink}
+                  onClick={handleDownloadStudentEvalHtml}
                   className="btn-press inline-flex min-h-11 items-center gap-1.5 rounded-pill border border-primary bg-surface px-4 py-2.5 text-caption font-semibold text-primary transition hover:bg-primary-light"
                 >
-                  <span>{copied ? '✓ 복사 완료' : '📋 학생 성과평가 링크 복사'}</span>
+                  <span>{copied ? '✓ 다운로드 완료' : '📋 학생 성과평가 html 다운로드'}</span>
                 </button>
               </div>
             </div>
@@ -522,10 +533,10 @@ export function SessionDetailView({ session }: { session: CoachingSessionData })
           </Link>
         ) : (
           <Link
-            href="/references"
+            href="/overview"
             className="bg-gradient-primary card-elevate btn-press rounded-pill px-6 py-2.5 text-body font-semibold text-on-primary shadow-card"
           >
-            자료실로 →
+            개요 →
           </Link>
         )}
       </div>

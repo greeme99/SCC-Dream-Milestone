@@ -61,14 +61,14 @@ test('TC-008 ~ TC-013: Tab 2 Pre-session, Sessions 1~5 5-stage tabs, checklists,
 
   const detailView = readSrc('src/components/SessionDetailView.tsx');
   assert.ok(detailView.includes('role="tablist"'), 'ARIA tablist implemented');
-  assert.ok(detailView.includes('navigator.clipboard.writeText'), 'Student eval clipboard copy implemented');
+  assert.ok(detailView.includes('학생 성과평가 html 다운로드'), 'Student eval HTML download implemented');
   assert.ok(detailView.includes('회기 작성하기'), 'Sessions 1~4 Google Form CTA');
   assert.ok(detailView.includes('코치 성과평가 작성하기'), 'Session 5 Coach Eval CTA');
   assert.ok(detailView.includes('btn-stage-next'), 'Stage-to-stage next button implemented');
   assert.ok(detailView.includes("activeStage === 'close'"), 'Between Session and Log restricted to Stage 5');
 });
 
-test('TC-014 ~ TC-016: Tab 3 References 5 resources, optional coaching tools (GROW, STAR, BRAVE), and quality checklist', () => {
+test('TC-014 ~ TC-016: Tab 3 References 4 resources, optional coaching tools (GROW, STAR, BRAVE), and quality checklist', () => {
   const extLinks = readSrc('src/config/external-links.ts');
   assert.ok(extLinks.includes('Dream Milestone Full Guide.pdf'));
   assert.ok(extLinks.includes('사전 세션 준비지'));
